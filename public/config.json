@@ -1,157 +1,180 @@
 {
-  "features": {
-    "animations": true,
-    "darkModeDefault": true,
-    "soundEffects": false
-  },
-  "games": {
-    "tango": {
-      "dailyPuzzle": true,
-      "difficulties": [
-        {
-          "givens": 14,
-          "id": "easy",
-          "label": "Mudah"
-        },
-        {
-          "givens": 10,
-          "id": "medium",
-          "label": "Sedang"
-        },
-        {
-          "givens": 7,
-          "id": "hard",
-          "label": "Sulit"
-        }
-      ],
-      "gridSize": 6,
-      "maxHints": 3,
-      "showTimer": true
+ "features": {
+  "animations": true,
+  "darkModeDefault": true,
+  "soundEffects": false
+ },
+ "games": {
+  "tango": {
+   "dailyPuzzle": true,
+   "difficulties": [
+    {
+     "givens": 14,
+     "id": "easy",
+     "label": "Mudah"
     },
-    "zip": {
-      "gridSize": 6,
-      "difficulties": [
-        {
-          "id": "easy",
-          "label": "Mudah",
-          "givens": 4
-        },
-        {
-          "id": "medium",
-          "label": "Sedang",
-          "givens": 3
-        },
-        {
-          "id": "hard",
-          "label": "Sulit",
-          "givens": 2
-        }
-      ],
-      "maxHints": 3,
-      "showTimer": true,
-      "dailyPuzzle": true
+    {
+     "givens": 10,
+     "id": "medium",
+     "label": "Sedang"
+    },
+    {
+     "givens": 7,
+     "id": "hard",
+     "label": "Sulit"
     }
+   ],
+   "gridSize": 6,
+   "maxHints": 3,
+   "showTimer": true
   },
-  "layout": {
-    "contentMaxWidth": 1180,
-    "sidebarWidth": 264,
-    "topbarHeight": 64
-  },
-  "chat": {
-    "enabled": true,
-    "botName": "Puzzle Bot",
-    "welcomeMessage": "Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango & Zip, game harian, skor, atau pengaturan tema.",
-    "geminiModel": "gemini-3.5-flash-lite",
-    "geminiApiKey": "",
-    "proxyUrl": "https://puzzle-bot-proxy.denitriyono03.workers.dev/chat",
-    "useGemini": true,
-    "maxHistoryMessages": 6,
-    "quickReplies": [
-      "Cara main Tango",
-      "Cara main Zip",
-      "Game harian",
-      "Game apa saja?",
-      "Skor & waktu terbaik",
-      "Mode gelap"
-    ]
-  },
-  "navigation": [
+  "zip": {
+   "gridSize": 6,
+   "difficulties": [
     {
-      "badge": "",
-      "enabled": true,
-      "icon": "home",
-      "id": "home",
-      "label": "Beranda",
-      "route": "/"
+     "id": "easy",
+     "label": "Mudah",
+     "givens": 4
     },
     {
-      "badge": "",
-      "enabled": true,
-      "icon": "wb_sunny",
-      "id": "tango",
-      "label": "Tango",
-      "route": "/tango"
+     "id": "medium",
+     "label": "Sedang",
+     "givens": 3
     },
     {
-      "badge": "Segera",
-      "enabled": false,
-      "icon": "grid_on",
-      "id": "queens",
-      "label": "Queens",
-      "route": "/queens"
-    },
-    {
-      "badge": "",
-      "enabled": true,
-      "icon": "route",
-      "id": "zip",
-      "label": "Zip",
-      "route": "/zip"
+     "id": "hard",
+     "label": "Sulit",
+     "givens": 2
     }
-  ],
-  "site": {
-    "description": "Hub game teka-teki logika: Tango Matahari & Bulan, Queens, dan Zip. Main gratis, tanpa iklan, langsung di browser.",
-    "footer": "Puzzle Games — dibuat dengan Angular & Angular Material. Semua game berjalan lokal di browsermu.",
-    "github": "https://github.com/denitriyono03/puzzle-games",
-    "logo": "🧩",
-    "name": "Puzzle Games",
-    "tagline": "Asah otakmu, satu teka-teki setiap kali.",
-    "version": "1.0.0"
+   ],
+   "maxHints": 3,
+   "showTimer": true,
+   "dailyPuzzle": true
   },
-  "theme": {
-    "accent": "#fbbf24",
-    "background": "#f3f4fa",
-    "backgroundBlur": 6,
-    "backgroundImage": "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80&auto=format&fit=crop",
-    "backgroundOverlayOpacity": 0.82,
-    "border": "#e4e6f0",
-    "borderRadius": "16px",
-    "card": "#ffffff",
-    "darkTheme": {
-      "accent": "#fbbf24",
-      "background": "#0b0b16",
-      "border": "#2e2e47",
-      "card": "#1b1b2e",
-      "error": "#ef4444",
-      "muted": "#9ca3af",
-      "primary": "#8b5cf6",
-      "secondary": "#22d3ee",
-      "success": "#22c55e",
-      "surface": "#151524",
-      "text": "#f3f4f6",
-      "warning": "#f59e0b"
+  "queens": {
+   "difficulties": [
+    {
+     "id": "easy",
+     "label": "Mudah",
+     "size": 6
     },
-    "error": "#dc2626",
-    "fontFamily": {
-      "body": "'Inter', system-ui, sans-serif",
-      "heading": "'Plus Jakarta Sans', system-ui, sans-serif"
+    {
+     "id": "medium",
+     "label": "Sedang",
+     "size": 7
     },
-    "muted": "#6b7280",
-    "primary": "#7c5cff",
-    "secondary": "#22d3ee",
-    "success": "#16a34a",
-    "surface": "#ffffff",
-    "text": "#1d1b2e",
-    "warning": "#d97706"
+    {
+     "id": "hard",
+     "label": "Sulit",
+     "size": 8
+    }
+   ],
+   "maxHints": 3,
+   "showTimer": true,
+   "dailyPuzzle": true
   }
+ },
+ "layout": {
+  "contentMaxWidth": 1180,
+  "sidebarWidth": 264,
+  "topbarHeight": 64
+ },
+ "chat": {
+  "enabled": true,
+  "botName": "Puzzle Bot",
+  "welcomeMessage": "Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango, Zip & Queens, game harian, skor, atau pengaturan tema.",
+  "geminiModel": "gemini-3.5-flash-lite",
+  "geminiApiKey": "",
+  "proxyUrl": "https://puzzle-bot-proxy.denitriyono03.workers.dev/chat",
+  "useGemini": true,
+  "maxHistoryMessages": 6,
+  "quickReplies": [
+   "Cara main Tango",
+   "Cara main Zip",
+   "Cara main Queens",
+   "Game harian",
+   "Game apa saja?",
+   "Skor & waktu terbaik",
+   "Mode gelap"
+  ]
+ },
+ "navigation": [
+  {
+   "badge": "",
+   "enabled": true,
+   "icon": "home",
+   "id": "home",
+   "label": "Beranda",
+   "route": "/"
+  },
+  {
+   "badge": "",
+   "enabled": true,
+   "icon": "wb_sunny",
+   "id": "tango",
+   "label": "Tango",
+   "route": "/tango"
+  },
+  {
+   "badge": "",
+   "enabled": true,
+   "icon": "grid_on",
+   "id": "queens",
+   "label": "Queens",
+   "route": "/queens"
+  },
+  {
+   "badge": "",
+   "enabled": true,
+   "icon": "route",
+   "id": "zip",
+   "label": "Zip",
+   "route": "/zip"
+  }
+ ],
+ "site": {
+  "description": "Hub game teka-teki logika: Tango Matahari & Bulan, Queens, dan Zip. Main gratis, tanpa iklan, langsung di browser.",
+  "footer": "Puzzle Games — dibuat dengan Angular & Angular Material. Semua game berjalan lokal di browsermu.",
+  "github": "https://github.com/denitriyono03/puzzle-games",
+  "logo": "🧩",
+  "name": "Puzzle Games",
+  "tagline": "Asah otakmu, satu teka-teki setiap kali.",
+  "version": "1.0.0"
+ },
+ "theme": {
+  "accent": "#fbbf24",
+  "background": "#f3f4fa",
+  "backgroundBlur": 6,
+  "backgroundImage": "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80&auto=format&fit=crop",
+  "backgroundOverlayOpacity": 0.82,
+  "border": "#e4e6f0",
+  "borderRadius": "16px",
+  "card": "#ffffff",
+  "darkTheme": {
+   "accent": "#fbbf24",
+   "background": "#0b0b16",
+   "border": "#2e2e47",
+   "card": "#1b1b2e",
+   "error": "#ef4444",
+   "muted": "#9ca3af",
+   "primary": "#8b5cf6",
+   "secondary": "#22d3ee",
+   "success": "#22c55e",
+   "surface": "#151524",
+   "text": "#f3f4f6",
+   "warning": "#f59e0b"
+  },
+  "error": "#dc2626",
+  "fontFamily": {
+   "body": "'Inter', system-ui, sans-serif",
+   "heading": "'Plus Jakarta Sans', system-ui, sans-serif"
+  },
+  "muted": "#6b7280",
+  "primary": "#7c5cff",
+  "secondary": "#22d3ee",
+  "success": "#16a34a",
+  "surface": "#ffffff",
+  "text": "#1d1b2e",
+  "warning": "#d97706"
+ }
 }

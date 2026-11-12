@@ -57,6 +57,24 @@ export interface ZipConfig {
   dailyPuzzle: boolean;
 }
 
+export interface QueensDifficulty {
+  id: string;
+  label: string;
+  /** Ukuran papan (6, 7, atau 8) — jumlah ratu yang harus dipasang. */
+  size: number;
+}
+
+/**
+ * Konfigurasi Queens. `size` tiap level = ukuran papan; makin besar
+ * papan (dan makin banyak wilayah), makin sulit.
+ */
+export interface QueensConfig {
+  difficulties: QueensDifficulty[];
+  maxHints: number;
+  showTimer: boolean;
+  dailyPuzzle: boolean;
+}
+
 export interface ChatConfig {
   enabled: boolean;
   botName: string;
@@ -85,6 +103,6 @@ export interface AppConfig {
   layout: { sidebarWidth: number; topbarHeight: number; contentMaxWidth: number };
   features: { darkModeDefault: boolean; animations: boolean; soundEffects: boolean };
   navigation: NavItem[];
-  games: { tango: TangoConfig; zip: ZipConfig };
+  games: { tango: TangoConfig; zip: ZipConfig; queens: QueensConfig };
   chat: ChatConfig;
 }

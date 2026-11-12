@@ -1,0 +1,147 @@
+.game-head {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 16px;
+  overflow: hidden;
+
+  mat-progress-bar { margin-top: 12px; }
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding-top: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+
+  mat-icon { color: var(--pg-primary); font-size: 1.2rem; width: 1.2rem; height: 1.2rem; }
+  &.best mat-icon { color: var(--pg-accent); }
+}
+
+.toolbar-card {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 20px;
+  padding: 12px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.difficulty { min-width: 200px; flex: 1 1 200px; margin-bottom: -1.25em; }
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 20px;
+  min-height: 380px;
+}
+
+.generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-weight: 600;
+  color: var(--pg-muted);
+}
+
+.board {
+  --pg-region-line: color-mix(in srgb, var(--pg-text) 55%, transparent);
+  display: grid;
+  grid-template-columns: repeat(var(--q-size), var(--q-cell));
+  grid-auto-rows: var(--q-cell);
+  gap: 0;
+  padding: 12px;
+  border-radius: var(--pg-radius);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--pg-primary) 14%, var(--pg-card)), var(--pg-card));
+  border: 1px solid var(--pg-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &.size-6 { --q-size: 6; --q-cell: 56px; }
+  &.size-7 { --q-size: 7; --q-cell: 50px; }
+  &.size-8 { --q-size: 8; --q-cell: 46px; }
+}
+
+.cell {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--pg-text) 12%, transparent);
+  border-radius: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  touch-action: none;
+  transition: filter 0.12s ease;
+
+  &:hover:not(:disabled) { filter: brightness(1.12); }
+  &:focus-visible { outline: 2px solid var(--pg-secondary); outline-offset: -2px; z-index: 1; }
+
+  /* Garis batas wilayah (atau tepi papan) — lebih tebal, ala Queens LinkedIn. */
+  &.e-t { border-top: 2px solid var(--pg-region-line); }
+  &.e-l { border-left: 2px solid var(--pg-region-line); }
+  &.e-b { border-bottom: 2px solid var(--pg-region-line); }
+  &.e-r { border-right: 2px solid var(--pg-region-line); }
+
+  &.error {
+    box-shadow: inset 0 0 0 3px var(--pg-error);
+    animation: shake 0.3s ease;
+  }
+}
+
+.queen {
+  font-size: 1.6rem;
+  line-height: 1;
+  user-select: none;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.xmark {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  color: color-mix(in srgb, var(--pg-text) 45%, transparent);
+  user-select: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.rules {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 8px;
+
+  h3 { margin: 0 0 8px; font-family: var(--pg-font-heading); }
+  ul { margin: 0; padding-left: 20px; color: var(--pg-muted); line-height: 1.7; font-size: 0.92rem; }
+}
+
+@media (max-width: 480px) {
+  .board {
+    padding: 8px;
+    &.size-6 { --q-cell: 44px; }
+    &.size-7 { --q-cell: 40px; }
+    &.size-8 { --q-cell: 36px; }
+  }
+  .queen { font-size: 1.3rem; }
+  .xmark { font-size: 1rem; }
+  .difficulty { flex-basis: 100%; }
+}
