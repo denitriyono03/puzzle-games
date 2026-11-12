@@ -59,6 +59,24 @@ export const FALLBACK_CONFIG: AppConfig = {
       maxHints: 3, showTimer: true, dailyPuzzle: true,
     },
   },
+  chat: {
+    enabled: true,
+    botName: 'Puzzle Bot',
+    welcomeMessage:
+      'Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango & Zip, game harian, skor, atau pengaturan tema.',
+    geminiModel: 'gemini-2.5-flash-lite',
+    geminiApiKey: '',
+    useGemini: true,
+    maxHistoryMessages: 6,
+    quickReplies: [
+      'Cara main Tango',
+      'Cara main Zip',
+      'Game harian',
+      'Game apa saja?',
+      'Skor & waktu terbaik',
+      'Mode gelap',
+    ],
+  },
 };
 
 @Injectable({ providedIn: 'root' })
@@ -71,12 +89,13 @@ export class ConfigService {
     try {
       const cfg = await firstValueFrom(this.http.get<AppConfig>('config.json'));
       if (cfg?.site && cfg?.theme) {
-        // Gabung dalam (khususnya `games`) agar config.json lama yang belum
-        // punya games.zip tidak merusak game Zip.
+        // Gabung dalam (khususnya `games` dan `chat`) agar config.json lama
+        // yang belum punya games.zip / chat tidak merusak game & bot.
         this.config = {
           ...FALLBACK_CONFIG,
           ...cfg,
           games: { ...FALLBACK_CONFIG.games, ...cfg.games },
+          chat: { ...FALLBACK_CONFIG.chat, ...(cfg.chat ?? {}) },
         };
       }
       this.loaded = true;

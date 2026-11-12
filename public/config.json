@@ -57,6 +57,23 @@
     "sidebarWidth": 264,
     "topbarHeight": 64
   },
+  "chat": {
+    "enabled": true,
+    "botName": "Puzzle Bot",
+    "welcomeMessage": "Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango & Zip, game harian, skor, atau pengaturan tema.",
+    "geminiModel": "gemini-2.5-flash-lite",
+    "geminiApiKey": "",
+    "useGemini": true,
+    "maxHistoryMessages": 6,
+    "quickReplies": [
+      "Cara main Tango",
+      "Cara main Zip",
+      "Game harian",
+      "Game apa saja?",
+      "Skor & waktu terbaik",
+      "Mode gelap"
+    ]
+  },
   "navigation": [
     {
       "badge": "",

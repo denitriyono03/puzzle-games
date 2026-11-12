@@ -31,6 +31,17 @@ dan **Zip** (satu jalur angka ala LinkedIn) yang sepenuhnya bisa dimainkan;
   jalur buntu lewat solver + snackbar), timer, penghitung langkah, progress,
   dialog menang + confetti CSS, waktu terbaik per level & streak harian
   tersimpan di `localStorage`. Semua teks Bahasa Indonesia.
+- **Chat dengan Bot** — tombol mengambang (FAB) di pojok kanan bawah membuka
+  popup chat di semua halaman. Bot hibrida: pertanyaan yang dikenali (aturan
+  Tango/Zip, game harian, skor & waktu terbaik dari `localStorage`, tema, daftar
+  game) dijawab langsung oleh bot terprogram; pertanyaan lain diteruskan ke
+  Gemini (`gemini-2.5-flash-lite`, model free tier termurah) dengan instruksi
+  sistem agar hanya menjawab seputar situs ini. API key Gemini **tidak pernah**
+  di-commit ke repo publik ini — pengunjung memasukkannya sendiri lewat ikon ⚙️
+  di popup chat (tersimpan di `localStorage` browsernya), atau pemilik situs
+  mengisinya di `config.json` setelah membatasi key di Google Cloud Console
+  (lihat bagian Keamanan di [`docs/CONFIG_GUIDE.md`](docs/CONFIG_GUIDE.md)).
+  Riwayat chat tersimpan lokal (maks 20 pesan) dan bisa dihapus.
 
 ## Menjalankan
 
