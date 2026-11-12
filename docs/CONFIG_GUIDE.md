@@ -218,3 +218,45 @@ Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kod
 | `pg-zip-best-<difficultyId>` | Waktu terbaik (detik) per level Zip |
 | `pg-zip-daily-streak` / `pg-zip-daily-last` | Streak & tanggal terakhir game harian Zip selesai |
 | `pg-stats-solved` | Total puzzle (Tango + Zip) yang diselesaikan (tampil di beranda) |
+| `pg-chat-history` | Riwayat chat dengan bot (maks 20 pesan terakhir) |
+| `pg-gemini-key` | API key Gemini milik pengunjung, diisi lewat popup chat (tidak pernah dari repo) |
+
+## `chat` — Chat dengan Bot
+
+Tombol mengambang (FAB) di pojok kanan bawah membuka popup chat. Bot bersifat
+hibrida: pertanyaan yang dikenali (aturan Tango/Zip, game harian, skor, tema,
+dll.) dijawab langsung oleh bot terprogram (tanpa internet); sisanya diteruskan
+ke Gemini — hanya bila API key tersedia.
+
+| Kunci | Tipe | Contoh | Keterangan |
+|---|---|---|---|
+| `enabled` | boolean | `true` | `false` = sembunyikan FAB & chat sepenuhnya |
+| `botName` | string | `"Puzzle Bot"` | Nama bot di header popup |
+| `welcomeMessage` | string | `"Halo! 👋 ..."` | Pesan pembuka saat riwayat kosong |
+| `geminiModel` | string | `"gemini-2.5-flash-lite"` | Model Gemini (free tier, paling murah) |
+| `geminiApiKey` | string | `""` | **Biarkan kosong di repo publik** (lihat Keamanan di bawah) |
+| `useGemini` | boolean | `true` | `false` = hanya bot terprogram, tanpa Gemini |
+| `maxHistoryMessages` | number | `6` | Jumlah pesan terakhir yang dikirim ke Gemini |
+| `quickReplies` | string[] | `["Cara main Tango", ...]` | Chip balasan cepat di atas kolom chat |
+
+Riwayat chat tersimpan di browser pengunjung (`localStorage` `pg-chat-history`,
+maks 20 pesan) dan bisa dihapus lewat tombol 🗑️ di popup. Kunci Gemini milik
+pengunjung disimpan di `localStorage` `pg-gemini-key` (diatur lewat ikon ⚙️ di
+popup chat) dan didahulukan atas `chat.geminiApiKey` dari config.
+
+## Keamanan — API key Gemini
+
+**JANGAN PERNAH menulis API key Gemini asli ke repo ini.** Repo ini publik —
+key yang ter-commit bisa dipakai siapa saja dan menghabiskan kuotamu.
+
+- Cara yang aman (dipakai sekarang): `chat.geminiApiKey` dikosongkan.
+  Pengunjung yang mau memakai Gemini memasukkan key-nya sendiri lewat ikon ⚙️
+  di popup chat; key itu hanya tersimpan di `localStorage` browsernya.
+- Kalau pemilik situs mau key aktif untuk semua pengunjung: batasi dulu key
+  itu di Google Cloud Console → Credentials → key tersebut → **API restrictions:
+  Generative Language API saja** dan **Application restrictions: HTTP referrers
+  `https://denitriyono03.github.io/*`**. Setelah dibatasi, barulah isi
+  `chat.geminiApiKey` di `config.json` (dan ingat: key itu tetap terlihat oleh
+  siapa pun yang membuka config.json — pembatasan referrer adalah pengamannya).
+- Kalau key bocor/ter-commit tanpa sengaja: hapus key itu di Google Cloud
+  Console dan buat key baru.

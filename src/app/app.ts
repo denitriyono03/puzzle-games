@@ -12,6 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ConfigService } from './config/config.service';
 import { ThemeService } from './services/theme.service';
+import { Chat } from './chat/chat';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ import { ThemeService } from './services/theme.service';
     CommonModule, RouterOutlet, RouterLink, RouterLinkActive,
     MatToolbarModule, MatSidenavModule, MatButtonModule, MatIconModule,
     MatListModule, MatCardModule, MatProgressSpinnerModule, MatTooltipModule,
+    Chat,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

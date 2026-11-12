@@ -57,6 +57,18 @@ export interface ZipConfig {
   dailyPuzzle: boolean;
 }
 
+export interface ChatConfig {
+  enabled: boolean;
+  botName: string;
+  welcomeMessage: string;
+  geminiModel: string;
+  /** Kosongkan di repo publik — key diisi pengunjung lewat popup chat (localStorage). */
+  geminiApiKey: string;
+  useGemini: boolean;
+  maxHistoryMessages: number;
+  quickReplies: string[];
+}
+
 export interface AppConfig {
   site: {
     name: string;
@@ -72,4 +84,5 @@ export interface AppConfig {
   features: { darkModeDefault: boolean; animations: boolean; soundEffects: boolean };
   navigation: NavItem[];
   games: { tango: TangoConfig; zip: ZipConfig };
+  chat: ChatConfig;
 }

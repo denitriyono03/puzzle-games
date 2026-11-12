@@ -1,0 +1,80 @@
+@if (config.config.chat.enabled) {
+  <button mat-fab class="chat-fab" (click)="toggle()"
+    [matTooltip]="open() ? 'Tutup chat' : 'Chat dengan Bot'"
+    [attr.aria-label]="open() ? 'Tutup chat' : 'Chat dengan Bot'">
+    <mat-icon>{{ open() ? 'close' : 'chat' }}</mat-icon>
+  </button>
+
+  @if (open()) {
+    <mat-card class="chat-panel">
+      <div class="chat-header">
+        <span class="chat-avatar">🧩</span>
+        <div class="chat-head-text">
+          <div class="chat-name">{{ config.config.chat.botName }}</div>
+          <div class="chat-status"><span class="chat-dot"></span> Online — siap membantu</div>
+        </div>
+        <span class="chat-head-spacer"></span>
+        <button mat-icon-button (click)="toggleSettings()" matTooltip="Pengaturan Gemini" aria-label="Pengaturan Gemini">
+          <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button (click)="clear()" matTooltip="Hapus riwayat" aria-label="Hapus riwayat">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button (click)="close()" matTooltip="Tutup" aria-label="Tutup chat">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      @if (showSettings()) {
+        <div class="chat-settings">
+          <div class="chat-settings-title">API key Gemini (opsional)</div>
+          <p class="chat-settings-note">
+            Dipakai hanya kalau pertanyaanmu tidak bisa dijawab bot terprogram.
+            Key disimpan di browser kamu saja, tidak dikirim ke mana pun selain Google.
+            @if (keySaved) { <strong>Key tersimpan ✓</strong> }
+          </p>
+          <div class="chat-settings-row">
+            <input type="password" [(ngModel)]="keyDraft" placeholder="Masukkan API key Gemini"
+              (keyup.enter)="saveKey()" aria-label="API key Gemini">
+            <button mat-raised-button color="primary" (click)="saveKey()">Simpan</button>
+            @if (keySaved) {
+              <button mat-button (click)="removeKey()">Hapus</button>
+            }
+          </div>
+          @if (keySavedNote()) {
+            <div class="chat-settings-saved">Key tersimpan di browser ini ✓</div>
+          }
+        </div>
+      }
+
+      <div class="chat-quick">
+        @for (q of config.config.chat.quickReplies; track q) {
+          <mat-chip (click)="sendQuick(q)">{{ q }}</mat-chip>
+        }
+      </div>
+
+      <div class="chat-messages" #messagesEl (click)="onMessagesClick($event)">
+        @for (m of chat.messages(); track $index) {
+          <div class="chat-msg" [class.user]="m.role === 'user'" [class.bot]="m.role === 'bot'">
+            <div class="chat-bubble" [innerHTML]="render(m.text)"></div>
+            <div class="chat-time">{{ fmtTime(m.time) }}</div>
+          </div>
+        }
+        @if (chat.typing()) {
+          <div class="chat-msg bot">
+            <div class="chat-bubble typing"><span></span><span></span><span></span></div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input">
+        <input [(ngModel)]="draft" (keyup.enter)="send()" placeholder="Tulis pertanyaanmu…"
+          [disabled]="chat.typing()" aria-label="Tulis pertanyaanmu" autocomplete="off">
+        <button mat-mini-fab color="primary" (click)="send()" [disabled]="!draft.trim() || chat.typing()"
+          aria-label="Kirim pesan">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  }
+}
