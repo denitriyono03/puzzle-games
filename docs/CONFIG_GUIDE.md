@@ -128,7 +128,7 @@ yang `disabled` tampil abu-abu + badge).
   { "id": "home",   "label": "Beranda", "icon": "home",     "route": "/",       "enabled": true,  "badge": "" },
   { "id": "tango",  "label": "Tango",   "icon": "wb_sunny", "route": "/tango",  "enabled": true,  "badge": "" },
   { "id": "queens", "label": "Queens",  "icon": "grid_on",  "route": "/queens", "enabled": false, "badge": "Segera" },
-  { "id": "zip",    "label": "Zip",     "icon": "route",    "route": "/zip",    "enabled": false, "badge": "Segera" }
+  { "id": "zip",    "label": "Zip",     "icon": "route",    "route": "/zip",    "enabled": true,  "badge": "" }
 ]
 ```
 
@@ -167,11 +167,54 @@ yang `disabled` tampil abu-abu + badge).
 | `showTimer` | Tampilkan timer & mulai hitung saat langkah pertama |
 | `dailyPuzzle` | Aktifkan tombol & route Game Harian (`/tango?mode=daily`) |
 
+## `games.zip`
+
+```jsonc
+"games": {
+  "zip": {
+    "gridSize": 6,
+    "difficulties": [
+      { "id": "easy",   "label": "Mudah", "givens": 4 },
+      { "id": "medium", "label": "Sedang", "givens": 3 },
+      { "id": "hard",   "label": "Sulit",  "givens": 2 }
+    ],
+    "maxHints": 3,
+    "showTimer": true,
+    "dailyPuzzle": true
+  }
+}
+```
+
+| Kunci | Keterangan |
+|---|---|
+| `gridSize` | Ukuran grid (saat ini 6; generator & solver ditulis untuk 6×6) |
+| `difficulties[]` | Daftar level: `id` (disimpan untuk waktu terbaik), `label`, `givens` = jumlah **angka perantara** di jalur (selain angka 1 dan angka tertinggi). Makin sedikit angka, makin sulit |
+| `maxHints` | Jumlah petunjuk per permainan |
+| `showTimer` | Tampilkan timer & mulai hitung saat langkah pertama |
+| `dailyPuzzle` | Aktifkan tombol & route Game Harian (`/zip?mode=daily`) |
+
+## Mengaktifkan / menonaktifkan game
+
+Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kode:
+
+1. Di `navigation`, ubah `enabled` item game itu (`true` = tampil sebagai menu aktif
+   di sidebar & topbar, `false` = masuk grup "Segera Hadir" di sidebar).
+2. Kartu game di beranda mengikuti `navigation` secara otomatis (status
+   "Siap dimainkan" / "Segera Hadir" dan tombol "Main Sekarang").
+3. Route game harus ada di `src/app/app.routes.ts` bila `enabled: true`
+   (mis. `/zip` → `loadComponent` ke `src/app/games/zip/zip.ts`).
+
+> Bila `config.json` tidak punya blok `games.zip` sama sekali (mis. config lama),
+> aplikasi memakai nilai fallback dari `src/app/config/config.service.ts`
+> (`FALLBACK_CONFIG`) sehingga game Zip tetap jalan.
+
 ## Data tersimpan di browser (`localStorage`)
 
 | Kunci | Isi |
 |---|---|
 | `pg-dark-mode` | `"1"` / `"0"` |
-| `pg-tango-best-<difficultyId>` | Waktu terbaik (detik) per level |
-| `pg-tango-daily-streak` / `pg-tango-daily-last` | Streak & tanggal terakhir game harian selesai |
-| `pg-stats-solved` | Total puzzle Tango yang diselesaikan (tampil di beranda) |
+| `pg-tango-best-<difficultyId>` | Waktu terbaik (detik) per level Tango |
+| `pg-tango-daily-streak` / `pg-tango-daily-last` | Streak & tanggal terakhir game harian Tango selesai |
+| `pg-zip-best-<difficultyId>` | Waktu terbaik (detik) per level Zip |
+| `pg-zip-daily-streak` / `pg-zip-daily-last` | Streak & tanggal terakhir game harian Zip selesai |
+| `pg-stats-solved` | Total puzzle (Tango + Zip) yang diselesaikan (tampil di beranda) |

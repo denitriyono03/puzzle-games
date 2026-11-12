@@ -1,0 +1,110 @@
+<mat-card class="game-head">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>route</mat-icon>
+    <mat-card-title>Zip 🔢</mat-card-title>
+    <mat-card-subtitle>
+      @if (isDaily) {
+        Game Harian — teka-teki baru setiap hari, sama untuk semua pemain.
+      } @else {
+        Tarik satu jalur dari angka 1 sampai {{ maxNumber }}, lewati semua angka berurutan dan isi seluruh papan.
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="stats-row">
+    @if (cfg.showTimer) {
+      <div class="stat"><mat-icon>timer</mat-icon><span>{{ fmt(seconds) }}</span></div>
+    }
+    <div class="stat"><mat-icon>mouse</mat-icon><span>{{ moves }} langkah</span></div>
+    <div class="stat"><mat-icon>grid_on</mat-icon><span>{{ path.length }}/{{ maxNumber }} terisi</span></div>
+    @if (bestTime !== null) {
+      <div class="stat best"><mat-icon>emoji_events</mat-icon><span>Terbaik: {{ fmt(bestTime) }}</span></div>
+    }
+    @if (isDaily && streak > 0) {
+      <div class="stat best"><mat-icon>local_fire_department</mat-icon><span>Streak: {{ streak }} hari</span></div>
+    }
+  </mat-card-content>
+  <mat-progress-bar mode="determinate" [value]="path.length / maxNumber * 100"></mat-progress-bar>
+</mat-card>
+
+<mat-card class="toolbar-card">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="difficulty">
+      <mat-label>Tingkat Kesulitan</mat-label>
+      <mat-select [value]="difficultyId" [disabled]="isDaily" (selectionChange)="newGame($event.value)">
+        @for (d of difficulties; track d.id) {
+          <mat-option [value]="d.id">{{ d.label }} ({{ d.givens }} angka)</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="newGame(difficultyId)" [disabled]="generating">
+      <mat-icon>refresh</mat-icon> Baru
+    </button>
+    <button mat-stroked-button (click)="startDaily()" [disabled]="generating" [color]="isDaily ? 'accent' : undefined">
+      <mat-icon>calendar_today</mat-icon> Harian
+    </button>
+    <button mat-stroked-button (click)="hint()" [disabled]="hintsLeft === 0 || won || generating" matTooltip="Lanjutkan jalur ke sel solusi berikutnya">
+      <mat-icon>lightbulb</mat-icon> Petunjuk ({{ hintsLeft }})
+    </button>
+    <button mat-stroked-button (click)="undo()" [disabled]="won || generating" matTooltip="Batalkan langkah terakhir">
+      <mat-icon>undo</mat-icon> Urungkan
+    </button>
+    <button mat-stroked-button (click)="reset()" [disabled]="generating">
+      <mat-icon>restart_alt</mat-icon> Ulangi
+    </button>
+    <button mat-raised-button color="accent" (click)="check()" [disabled]="generating">
+      <mat-icon>check_circle</mat-icon> Periksa
+    </button>
+  </div>
+</mat-card>
+
+<div class="board-wrap">
+  @if (generating) {
+    <div class="generating">
+      <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
+      <p>Membuat puzzle baru…</p>
+    </div>
+  } @else {
+    <div class="board" role="grid" aria-label="Papan Zip 6x6"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp()"
+      (pointercancel)="onPointerCancel()"
+      (pointerleave)="onPointerUp()">
+      <svg class="path-line" viewBox="0 0 394 394" preserveAspectRatio="none" aria-hidden="true">
+        @if (path.length > 1) {
+          <polyline [attr.points]="pathPoints" />
+        }
+      </svg>
+      @for (row of clues; track $index; let r = $index) {
+        @for (num of row; track $index; let c = $index) {
+          <button class="cell" data-cell
+            [attr.data-r]="r" [attr.data-c]="c"
+            [class.in-path]="pathIndex[r][c] >= 0"
+            [class.clue]="num > 0"
+            [class.head]="isHead(r, c)"
+            [class.error]="badCells.has(r + ',' + c)"
+            (pointerdown)="onPointerDown($event, r, c)"
+            [attr.aria-label]="'Baris ' + (r + 1) + ' kolom ' + (c + 1) + (num > 0 ? ', angka ' + num : '')">
+            @if (num > 0) {
+              <span class="clue-num">{{ num }}</span>
+            } @else if (pathIndex[r][c] >= 0) {
+              <span class="step-num">{{ pathIndex[r][c] + 1 }}</span>
+            }
+          </button>
+        }
+      }
+    </div>
+  }
+</div>
+
+<mat-card class="rules">
+  <mat-card-content>
+    <h3>Aturan Main</h3>
+    <ul>
+      <li>Tekan sel 1 (atau ujung jalur) lalu <strong>seret</strong> ke sel sebelah — atau ketuk sel sebelah untuk melangkah satu kotak.</li>
+      <li>Jalur hanya bergerak ke atas, bawah, kiri, atau kanan, dan tidak boleh kembali ke sel yang sudah dilewati.</li>
+      <li>Lewati semua angka secara berurutan (1 → 2 → 3 …); angka hanya bisa dimasuki tepat pada gilirannya.</li>
+      <li>Isi seluruh papan ({{ maxNumber }} sel) dan akhiri di angka tertinggi untuk menang.</li>
+      <li>Ketuk ujung jalur untuk mengurungkan satu langkah.</li>
+    </ul>
+  </mat-card-content>
+</mat-card>

@@ -45,6 +45,18 @@ export interface TangoConfig {
   dailyPuzzle: boolean;
 }
 
+/**
+ * Konfigurasi Zip. `givens` tiap level = jumlah angka perantara di jalur
+ * (selain angka 1 dan angka tertinggi). Makin sedikit angka, makin sulit.
+ */
+export interface ZipConfig {
+  gridSize: number;
+  difficulties: Difficulty[];
+  maxHints: number;
+  showTimer: boolean;
+  dailyPuzzle: boolean;
+}
+
 export interface AppConfig {
   site: {
     name: string;
@@ -59,5 +71,5 @@ export interface AppConfig {
   layout: { sidebarWidth: number; topbarHeight: number; contentMaxWidth: number };
   features: { darkModeDefault: boolean; animations: boolean; soundEffects: boolean };
   navigation: NavItem[];
-  games: { tango: TangoConfig };
+  games: { tango: TangoConfig; zip: ZipConfig };
 }

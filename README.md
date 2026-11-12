@@ -2,8 +2,8 @@
 
 Hub game teka-teki logika berbasis **Angular 22 + Angular Material 22** (standalone
 components, SCSS, tanpa SSR). Saat ini berisi **Tango** (Matahari & Bulan ala LinkedIn)
-yang sepenuhnya bisa dimainkan; **Queens** dan **Zip** sudah disiapkan sebagai kartu
-"Segera Hadir".
+dan **Zip** (satu jalur angka ala LinkedIn) yang sepenuhnya bisa dimainkan;
+**Queens** sudah disiapkan sebagai kartu "Segera Hadir".
 
 - 🌐 Live (setelah deploy): https://denitriyono03.github.io/puzzle-games/
 - ⚙️ Semua tampilan & navigasi dikendalikan satu file: [`public/config.json`](public/config.json)
@@ -22,6 +22,14 @@ yang sepenuhnya bisa dimainkan; **Queens** dan **Zip** sudah disiapkan sebagai k
   3 tingkat kesulitan, puzzle harian (seed tanggal UTC), petunjuk (maks 3), undo,
   reset, periksa (sorot sel bermasalah + snackbar), timer, penghitung langkah,
   progress, dialog menang + confetti CSS, waktu terbaik per level & streak harian
+  tersimpan di `localStorage`. Semua teks Bahasa Indonesia.
+- **Zip 6×6, lazy-loaded** (`/zip`, chunk terpisah + spinner saat memuat):
+  seret satu jalur dari angka 1 sampai 36 melewati semua angka berurutan dan
+  mengisi seluruh papan (Hamiltonian path), generator puzzle dengan solusi
+  **unik terverifikasi** (Warnsdorff + solver), 3 tingkat kesulitan, puzzle
+  harian (seed tanggal UTC), petunjuk (maks 3), undo, reset, periksa (deteksi
+  jalur buntu lewat solver + snackbar), timer, penghitung langkah, progress,
+  dialog menang + confetti CSS, waktu terbaik per level & streak harian
   tersimpan di `localStorage`. Semua teks Bahasa Indonesia.
 
 ## Menjalankan
@@ -49,7 +57,11 @@ src/
       tango.ts / .html / .scss  # komponen game + dialog menang
       tango-generator.ts        # generator puzzle (solusi unik)
       tango-solver.ts           # solver/backtracking + validasi
-    app.routes.ts        # home (lazy) + tango (lazy, loadComponent)
+    games/zip/
+      zip.ts / .html / .scss    # komponen game + dialog menang
+      zip-generator.ts          # generator Hamiltonian path (Warnsdorff + solusi unik)
+      zip-solver.ts             # solver jalur + validasi
+    app.routes.ts        # home (lazy) + tango & zip (lazy, loadComponent)
   styles.scss            # tema Material + font self-hosted (Fontsource) + CSS variables
 docs/CONFIG_GUIDE.md     # panduan lengkap config.json
 ```
@@ -94,3 +106,9 @@ bisa langsung di-deploy ke GitHub Pages (mis. via Actions `upload-pages-artifact
   konsisten dengan solusi, lalu sel dihapus satu per satu — penghapusan hanya
   dipertahankan bila solver (cap 2 solusi) memastikan solusi tetap unik.
   Anggaran waktu generasi < 2 detik; terukur ~1–7 ms per puzzle di pengujian.
+- **Generator Zip**: satu Hamiltonian path acak dibuat dengan greedy Warnsdorff
+  (fallback DFS backtracking), lalu nomor 1, angka tertinggi, dan sejumlah angka
+  perantara dipasang di sepanjang path. Keunikan solusi diverifikasi solver
+  (cap 2 solusi, dengan pruning konektivitas + paritas jarak ke angka berikutnya);
+  bila tidak unik, satu angka tambahan dipasang di tengah celah terbesar
+  (maks 4 tambahan) sebelum path dibuat ulang. Anggaran waktu generasi < 2 detik.

@@ -51,15 +51,20 @@
         }
       }
       @if (hasComingSoon()) {
-        <div class="nav-section">Segera Hadir</div>
-        @for (item of config.config.navigation; track item.id) {
-          @if (!item.enabled) {
-            <a mat-list-item disabled>
-              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-              <span matListItemTitle>{{ item.label }}</span>
-            </a>
-          }
-        }
+        <div class="coming-soon">
+          <div class="nav-section">Segera Hadir</div>
+          <div class="coming-soon-list">
+            @for (item of config.config.navigation; track item.id) {
+              @if (!item.enabled) {
+                <div class="coming-soon-item" [matTooltip]="item.label + ' — segera hadir'">
+                  <mat-icon>{{ item.icon }}</mat-icon>
+                  <span class="coming-soon-label">{{ item.label }}</span>
+                  <span class="coming-soon-badge">{{ item.badge || 'Segera' }}</span>
+                </div>
+              }
+            }
+          </div>
+        </div>
       }
     </mat-nav-list>
 
@@ -90,7 +95,7 @@
     @if (loading()) {
       <div class="loading-overlay">
         <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
-        <p>Memuat Tango…</p>
+        <p>Memuat game…</p>
       </div>
     }
     <div class="page">

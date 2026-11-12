@@ -11,5 +11,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./games/tango/tango').then((m) => m.Tango),
   },
+  {
+    path: 'zip',
+    loadComponent: () =>
+      import('./games/zip/zip').then((m) => m.Zip),
+  },
   { path: '**', redirectTo: '' },
 ];
