@@ -233,7 +233,7 @@ ke Gemini — hanya bila API key tersedia.
 | `enabled` | boolean | `true` | `false` = sembunyikan FAB & chat sepenuhnya |
 | `botName` | string | `"Puzzle Bot"` | Nama bot di header popup |
 | `welcomeMessage` | string | `"Halo! 👋 ..."` | Pesan pembuka saat riwayat kosong |
-| `geminiModel` | string | `"gemini-2.5-flash-lite"` | Model Gemini (free tier, paling murah) |
+| `geminiModel` | string | `"gemini-3.5-flash-lite"` | Model Gemini (free tier, paling murah) |
 | `geminiApiKey` | string | `""` | **Biarkan kosong di repo publik** (lihat Keamanan di bawah) |
 | `useGemini` | boolean | `true` | `false` = hanya bot terprogram, tanpa Gemini |
 | `maxHistoryMessages` | number | `6` | Jumlah pesan terakhir yang dikirim ke Gemini |

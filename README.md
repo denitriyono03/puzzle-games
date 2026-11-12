@@ -35,7 +35,7 @@ dan **Zip** (satu jalur angka ala LinkedIn) yang sepenuhnya bisa dimainkan;
   popup chat di semua halaman. Bot hibrida: pertanyaan yang dikenali (aturan
   Tango/Zip, game harian, skor & waktu terbaik dari `localStorage`, tema, daftar
   game) dijawab langsung oleh bot terprogram; pertanyaan lain diteruskan ke
-  Gemini (`gemini-2.5-flash-lite`, model free tier termurah) dengan instruksi
+  Gemini (`gemini-3.5-flash-lite`, model free tier termurah) dengan instruksi
   sistem agar hanya menjawab seputar situs ini. API key Gemini **tidak pernah**
   di-commit ke repo publik ini — pengunjung memasukkannya sendiri lewat ikon ⚙️
   di popup chat (tersimpan di `localStorage` browsernya), atau pemilik situs

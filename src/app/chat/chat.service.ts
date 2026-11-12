@@ -351,7 +351,7 @@ export class ChatService {
   private async askGemini(text: string): Promise<string> {
     const cfg = this.config.config.chat;
     const key = this.resolveGeminiKey();
-    const model = cfg.geminiModel || 'gemini-2.5-flash-lite';
+    const model = cfg.geminiModel || 'gemini-3.5-flash-lite';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
 
     const history = this.messages()

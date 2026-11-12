@@ -64,7 +64,7 @@ export const FALLBACK_CONFIG: AppConfig = {
     botName: 'Puzzle Bot',
     welcomeMessage:
       'Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango & Zip, game harian, skor, atau pengaturan tema.',
-    geminiModel: 'gemini-2.5-flash-lite',
+    geminiModel: 'gemini-3.5-flash-lite',
     geminiApiKey: '',
     useGemini: true,
     maxHistoryMessages: 6,
