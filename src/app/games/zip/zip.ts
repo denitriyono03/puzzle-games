@@ -148,6 +148,15 @@ export class Zip implements OnInit, OnDestroy {
     return this.path.map(([r, c]) => `${14 + c * 62 + 28},${14 + r * 62 + 28}`).join(' ');
   }
 
+  /**
+   * Posisi tengah sel ke-i (0..5) sebagai persen lebar/tinggi papan — dipakai
+   * lingkaran angka (.clue-dot) agar selalu tepat di tengah sel, di semua ukuran layar.
+   * Rumusnya sama dengan pathPoints: tengah sel = 14 + i*62 + 28 dari 394.
+   */
+  cellCenterPct(i: number): number {
+    return ((42 + i * 62) / 394) * 100;
+  }
+
   ngOnInit(): void {
     this.streak = Number(localStorage.getItem('pg-zip-daily-streak') ?? 0);
     this.route.queryParamMap.subscribe((params) => {
