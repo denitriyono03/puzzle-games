@@ -1,0 +1,156 @@
+.game-head {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding-top: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+
+  mat-icon { color: var(--pg-primary); font-size: 1.2rem; width: 1.2rem; height: 1.2rem; }
+  &.best mat-icon { color: var(--pg-accent); }
+}
+
+.toolbar-card {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 20px;
+  padding: 12px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.difficulty { min-width: 200px; flex: 1 1 200px; margin-bottom: -1.25em; }
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 20px;
+  min-height: 380px;
+}
+
+.generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-weight: 600;
+  color: var(--pg-muted);
+}
+
+.play {
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--pg-radius);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--pg-primary) 14%, var(--pg-card)), var(--pg-card));
+  border: 1px solid var(--pg-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  padding: 24px;
+
+  &.wrong { animation: shake 0.3s ease; }
+}
+
+.clues {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.clue-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 84px;
+  padding: 12px 8px;
+  border-radius: 12px;
+  background: var(--pg-surface);
+  border: 1px solid var(--pg-border);
+  font-family: var(--pg-font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.pattern {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  min-height: 40px;
+}
+
+.pattern-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 40px;
+  border-bottom: 3px solid var(--pg-primary);
+  font-family: var(--pg-font-heading);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--pg-text);
+
+  &.space { border-bottom-color: transparent; min-width: 16px; }
+}
+
+.answer-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.answer-field { flex: 1 1 280px; margin-bottom: -1.25em; }
+
+.lang-note {
+  margin: 16px 0 0;
+  font-size: 0.85rem;
+  color: var(--pg-muted);
+  line-height: 1.5;
+  text-align: center;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.rules {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 8px;
+
+  h3 { margin: 0 0 8px; font-family: var(--pg-font-heading); }
+  ul { margin: 0; padding-left: 20px; color: var(--pg-muted); line-height: 1.7; font-size: 0.92rem; }
+}
+
+@media (max-width: 480px) {
+  .play { padding: 16px; }
+  .clues { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .clue-card { min-height: 68px; font-size: 1rem; }
+  .pattern-char { min-width: 24px; height: 34px; font-size: 1.2rem; }
+  .difficulty { flex-basis: 100%; }
+  .answer-row button { width: 100%; }
+}

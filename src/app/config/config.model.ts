@@ -75,6 +75,23 @@ export interface QueensConfig {
   dailyPuzzle: boolean;
 }
 
+export interface ThreadDifficulty {
+  id: string;
+  label: string;
+}
+
+/**
+ * Konfigurasi Common Thread. Tiap level punya 5 puzzle kurasi (lihat
+ * `src/app/games/thread/thread-data.ts`); `difficulties` hanya memilih
+ * label & pool puzzle.
+ */
+export interface ThreadConfig {
+  difficulties: ThreadDifficulty[];
+  maxHints: number;
+  showTimer: boolean;
+  dailyPuzzle: boolean;
+}
+
 export interface ChatConfig {
   enabled: boolean;
   botName: string;
@@ -103,6 +120,6 @@ export interface AppConfig {
   layout: { sidebarWidth: number; topbarHeight: number; contentMaxWidth: number };
   features: { darkModeDefault: boolean; animations: boolean; soundEffects: boolean };
   navigation: NavItem[];
-  games: { tango: TangoConfig; zip: ZipConfig; queens: QueensConfig };
+  games: { tango: TangoConfig; zip: ZipConfig; queens: QueensConfig; thread: ThreadConfig };
   chat: ChatConfig;
 }

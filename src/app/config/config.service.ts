@@ -38,6 +38,7 @@ export const FALLBACK_CONFIG: AppConfig = {
     { id: 'tango', label: 'Tango', icon: 'wb_sunny', route: '/tango', enabled: true, badge: '' },
     { id: 'queens', label: 'Queens', icon: 'grid_on', route: '/queens', enabled: true, badge: '' },
     { id: 'zip', label: 'Zip', icon: 'route', route: '/zip', enabled: true, badge: '' },
+    { id: 'thread', label: 'Common Thread', icon: 'link', route: '/thread', enabled: true, badge: '' },
   ],
   games: {
     tango: {
@@ -66,12 +67,20 @@ export const FALLBACK_CONFIG: AppConfig = {
       ],
       maxHints: 3, showTimer: true, dailyPuzzle: true,
     },
+    thread: {
+      difficulties: [
+        { id: 'easy', label: 'Mudah' },
+        { id: 'medium', label: 'Sedang' },
+        { id: 'hard', label: 'Sulit' },
+      ],
+      maxHints: 3, showTimer: true, dailyPuzzle: true,
+    },
   },
   chat: {
     enabled: true,
     botName: 'Puzzle Bot',
     welcomeMessage:
-      'Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango, Zip & Queens, game harian, skor, atau pengaturan tema.',
+      'Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango, Zip, Queens & Common Thread, game harian, skor, atau pengaturan tema.',
     geminiModel: 'gemini-3.5-flash-lite',
     geminiApiKey: '',
     proxyUrl: '',
@@ -81,6 +90,7 @@ export const FALLBACK_CONFIG: AppConfig = {
       'Cara main Tango',
       'Cara main Zip',
       'Cara main Queens',
+      'Cara main Common Thread',
       'Game harian',
       'Game apa saja?',
       'Skor & waktu terbaik',

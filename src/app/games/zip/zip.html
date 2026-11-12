@@ -32,7 +32,7 @@
       <mat-label>Tingkat Kesulitan</mat-label>
       <mat-select [value]="difficultyId" [disabled]="isDaily" (selectionChange)="newGame($event.value)">
         @for (d of difficulties; track d.id) {
-          <mat-option [value]="d.id">{{ d.label }} ({{ d.givens }} angka)</mat-option>
+          <mat-option [value]="d.id">{{ d.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

@@ -56,6 +56,11 @@ export class Home implements OnInit {
       description: 'Tarik satu jalur dari angka 1 sampai 36, lewati semua angka berurutan, dan isi seluruh papan 6×6 tanpa ada sel yang terlewat.',
       route: '/zip', enabled: true, chips: ['Mudah', 'Sedang', 'Sulit', 'Harian'],
     },
+    {
+      id: 'thread', name: 'Common Thread', icon: 'link', emoji: '🧵',
+      description: 'Tebak kata yang menghubungkan empat petunjuk — temukan benang merahnya! Petunjuk dan jawaban dalam Bahasa Inggris.',
+      route: '/thread', enabled: true, chips: ['Mudah', 'Sedang', 'Sulit', 'Harian'],
+    },
   ];
 
   get enabledCount(): number {

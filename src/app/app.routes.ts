@@ -21,5 +21,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./games/zip/zip').then((m) => m.Zip),
   },
+  {
+    path: 'thread',
+    loadComponent: () =>
+      import('./games/thread/thread').then((m) => m.Thread),
+  },
   { path: '**', redirectTo: '' },
 ];

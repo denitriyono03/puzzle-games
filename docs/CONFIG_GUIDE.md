@@ -222,6 +222,34 @@ yang `disabled` tampil abu-abu + badge).
 > Kemenangan dinilai dari aturan (bukan dari solusi tersimpan), jadi puzzle
 > tidak perlu diverifikasi unik.
 
+## `games.thread`
+
+```jsonc
+"games": {
+  "thread": {
+    "difficulties": [
+      { "id": "easy",   "label": "Mudah" },
+      { "id": "medium", "label": "Sedang" },
+      { "id": "hard",   "label": "Sulit" }
+    ],
+    "maxHints": 3,
+    "showTimer": true,
+    "dailyPuzzle": true
+  }
+}
+```
+
+| Kunci | Keterangan |
+|---|---|
+| `difficulties[]` | Daftar level: `id` (disimpan untuk waktu terbaik) dan `label`. Tiap level punya 5 puzzle kurasi di `src/app/games/thread/thread-data.ts` |
+| `maxHints` | Jumlah petunjuk per permainan (satu petunjuk = satu huruf jawaban terbuka) |
+| `showTimer` | Tampilkan timer & mulai hitung saat percobaan pertama |
+| `dailyPuzzle` | Aktifkan tombol & route Game Harian (`/thread?mode=daily`) |
+
+> Puzzle Common Thread di-port dari PuzzleVerse (`src/games/thread.ts`) —
+> 15 puzzle kurasi berbahasa Inggris. Jawaban dicocokkan tanpa peka huruf
+> besar/kecil dan menerima alias.
+
 ## Mengaktifkan / menonaktifkan game
 
 Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kode:
@@ -248,7 +276,9 @@ Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kod
 | `pg-zip-daily-streak` / `pg-zip-daily-last` | Streak & tanggal terakhir game harian Zip selesai |
 | `pg-queens-best-<difficultyId>` | Waktu terbaik (detik) per level Queens |
 | `pg-queens-daily-streak` / `pg-queens-daily-last` | Streak & tanggal terakhir game harian Queens selesai |
-| `pg-stats-solved` | Total puzzle (Tango + Zip + Queens) yang diselesaikan (tampil di beranda) |
+| `pg-thread-best-<difficultyId>` | Waktu terbaik (detik) per level Common Thread |
+| `pg-thread-daily-streak` / `pg-thread-daily-last` | Streak & tanggal terakhir game harian Common Thread selesai |
+| `pg-stats-solved` | Total puzzle (Tango + Zip + Queens + Common Thread) yang diselesaikan (tampil di beranda) |
 | `pg-chat-history` | Riwayat chat dengan bot (maks 20 pesan terakhir) |
 | `pg-gemini-key` | API key Gemini milik pengunjung, diisi lewat popup chat (tidak pernah dari repo) |
 

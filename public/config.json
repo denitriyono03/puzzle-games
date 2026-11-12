@@ -72,6 +72,25 @@
    "maxHints": 3,
    "showTimer": true,
    "dailyPuzzle": true
+  },
+  "thread": {
+   "difficulties": [
+    {
+     "id": "easy",
+     "label": "Mudah"
+    },
+    {
+     "id": "medium",
+     "label": "Sedang"
+    },
+    {
+     "id": "hard",
+     "label": "Sulit"
+    }
+   ],
+   "maxHints": 3,
+   "showTimer": true,
+   "dailyPuzzle": true
   }
  },
  "layout": {
@@ -82,7 +101,7 @@
  "chat": {
   "enabled": true,
   "botName": "Puzzle Bot",
-  "welcomeMessage": "Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango, Zip & Queens, game harian, skor, atau pengaturan tema.",
+  "welcomeMessage": "Halo! 👋 Aku Puzzle Bot. Tanya apa saja seputar Puzzle Games — cara main Tango, Zip, Queens & Common Thread, game harian, skor, atau pengaturan tema.",
   "geminiModel": "gemini-3.5-flash-lite",
   "geminiApiKey": "",
   "proxyUrl": "https://puzzle-bot-proxy.denitriyono03.workers.dev/chat",
@@ -92,6 +111,7 @@
    "Cara main Tango",
    "Cara main Zip",
    "Cara main Queens",
+   "Cara main Common Thread",
    "Game harian",
    "Game apa saja?",
    "Skor & waktu terbaik",
@@ -130,6 +150,14 @@
    "id": "zip",
    "label": "Zip",
    "route": "/zip"
+  },
+  {
+   "badge": "",
+   "enabled": true,
+   "icon": "link",
+   "id": "thread",
+   "label": "Common Thread",
+   "route": "/thread"
   }
  ],
  "site": {

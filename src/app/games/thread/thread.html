@@ -1,0 +1,96 @@
+<mat-card class="game-head">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>link</mat-icon>
+    <mat-card-title>Common Thread 🧵</mat-card-title>
+    <mat-card-subtitle>
+      @if (isDaily) {
+        Game Harian — teka-teki baru setiap hari, sama untuk semua pemain.
+      } @else {
+        Tebak kata yang menghubungkan keempat petunjuk — temukan benang merahnya!
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="stats-row">
+    @if (cfg.showTimer) {
+      <div class="stat"><mat-icon>timer</mat-icon><span>{{ fmt(seconds) }}</span></div>
+    }
+    <div class="stat"><mat-icon>mouse</mat-icon><span>{{ attempts }} percobaan</span></div>
+    @if (bestTime !== null) {
+      <div class="stat best"><mat-icon>emoji_events</mat-icon><span>Terbaik: {{ fmt(bestTime) }}</span></div>
+    }
+    @if (isDaily && streak > 0) {
+      <div class="stat best"><mat-icon>local_fire_department</mat-icon><span>Streak: {{ streak }} hari</span></div>
+    }
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="toolbar-card">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="difficulty">
+      <mat-label>Tingkat Kesulitan</mat-label>
+      <mat-select [value]="difficultyId" [disabled]="isDaily" (selectionChange)="newGame($event.value)">
+        @for (d of difficulties; track d.id) {
+          <mat-option [value]="d.id">{{ d.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="newGame(difficultyId)" [disabled]="generating">
+      <mat-icon>refresh</mat-icon> Baru
+    </button>
+    <button mat-stroked-button (click)="startDaily()" [disabled]="generating" [color]="isDaily ? 'accent' : undefined">
+      <mat-icon>calendar_today</mat-icon> Harian
+    </button>
+    <button mat-stroked-button (click)="hint()" [disabled]="hintsLeft === 0 || won || generating" matTooltip="Buka satu huruf jawaban">
+      <mat-icon>lightbulb</mat-icon> Petunjuk ({{ hintsLeft }})
+    </button>
+    <button mat-stroked-button (click)="reset()" [disabled]="generating">
+      <mat-icon>restart_alt</mat-icon> Ulangi
+    </button>
+  </div>
+</mat-card>
+
+<div class="board-wrap">
+  @if (generating || !puzzle) {
+    <div class="generating">
+      <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
+      <p>Membuat puzzle baru…</p>
+    </div>
+  } @else {
+    <div class="play" [class.wrong]="wrongFlash">
+      <div class="clues" role="group" aria-label="Empat petunjuk">
+        @for (clue of puzzle.clues; track clue) {
+          <div class="clue-card">{{ clue }}</div>
+        }
+      </div>
+      <div class="pattern" aria-label="Pola jawaban">
+        @for (ch of patternChars; track $index) {
+          <span class="pattern-char" [class.space]="ch === ' '">{{ ch }}</span>
+        }
+      </div>
+      <form class="answer-row" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="answer-field">
+          <mat-label>Apa benang merahnya? (dalam Bahasa Inggris)</mat-label>
+          <input matInput [(ngModel)]="draft" name="answer" [disabled]="won"
+            placeholder="mis. Trees" autocomplete="off" aria-label="Jawaban">
+        </mat-form-field>
+        <button mat-raised-button color="accent" type="submit" [disabled]="won || generating">
+          <mat-icon>check_circle</mat-icon> Periksa Jawaban
+        </button>
+      </form>
+      <p class="lang-note">Petunjuk dan jawaban dalam Bahasa Inggris — jawaban tidak peka huruf besar/kecil, dan jawaban lain yang semakna juga diterima.</p>
+    </div>
+  }
+</div>
+
+<mat-card class="rules">
+  <mat-card-content>
+    <h3>Aturan Main</h3>
+    <ul>
+      <li>Empat kata petunjuk punya satu kesamaan — tebak kata atau kategorinya.</li>
+      <li>Ketik jawabanmu (dalam Bahasa Inggris) lalu tekan <strong>Periksa Jawaban</strong> atau Enter.</li>
+      <li>Jawaban yang semakna diterima — mis. "tree" untuk "Trees".</li>
+      <li>Stuck? Petunjuk membuka satu huruf jawaban (maks 3 per puzzle).</li>
+      <li>Tiap level punya 5 puzzle kurasi; tombol Baru mengambil puzzle lain di level yang sama.</li>
+    </ul>
+  </mat-card-content>
+</mat-card>
