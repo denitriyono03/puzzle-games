@@ -78,18 +78,21 @@
         @for (num of row; track $index; let c = $index) {
           <button class="cell" data-cell
             [attr.data-r]="r" [attr.data-c]="c"
-            [class.in-path]="pathIndex[r][c] >= 0"
             [class.clue]="num > 0"
             [class.head]="isHead(r, c)"
             [class.error]="badCells.has(r + ',' + c)"
             (pointerdown)="onPointerDown($event, r, c)"
             [attr.aria-label]="'Baris ' + (r + 1) + ' kolom ' + (c + 1) + (num > 0 ? ', angka ' + num : '')">
-            @if (num > 0) {
-              <span class="clue-num">{{ num }}</span>
-            } @else if (pathIndex[r][c] >= 0) {
-              <span class="step-num">{{ pathIndex[r][c] + 1 }}</span>
-            }
           </button>
+        }
+      }
+      <!-- Lingkaran angka (ala LinkedIn): di ATAS garis, hanya angka petunjuk urutan 1..36. -->
+      @for (row of clues; track $index; let r = $index) {
+        @for (num of row; track $index; let c = $index) {
+          @if (num > 0) {
+            <span class="clue-dot" aria-hidden="true"
+              [style.left.%]="cellCenterPct(c)" [style.top.%]="cellCenterPct(r)">{{ num }}</span>
+          }
         }
       }
     </div>
