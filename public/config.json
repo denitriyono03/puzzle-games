@@ -27,6 +27,29 @@
       "gridSize": 6,
       "maxHints": 3,
       "showTimer": true
+    },
+    "zip": {
+      "gridSize": 6,
+      "difficulties": [
+        {
+          "id": "easy",
+          "label": "Mudah",
+          "givens": 4
+        },
+        {
+          "id": "medium",
+          "label": "Sedang",
+          "givens": 3
+        },
+        {
+          "id": "hard",
+          "label": "Sulit",
+          "givens": 2
+        }
+      ],
+      "maxHints": 3,
+      "showTimer": true,
+      "dailyPuzzle": true
     }
   },
   "layout": {
@@ -60,8 +83,8 @@
       "route": "/queens"
     },
     {
-      "badge": "Segera",
-      "enabled": false,
+      "badge": "",
+      "enabled": true,
       "icon": "route",
       "id": "zip",
       "label": "Zip",

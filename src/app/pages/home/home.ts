@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,11 +25,20 @@ interface GameCard {
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements OnInit {
   protected config = inject(ConfigService);
 
   solved = Number(localStorage.getItem('pg-stats-solved') ?? 0);
   streak = Number(localStorage.getItem('pg-tango-daily-streak') ?? 0);
+
+  ngOnInit(): void {
+    // Status kartu mengikuti config.json → navigation (enabled),
+    // jadi mematikan game cukup dengan mengubah satu file config.
+    for (const g of this.games) {
+      const nav = this.config.config.navigation.find((n) => n.id === g.id);
+      if (nav) g.enabled = nav.enabled;
+    }
+  }
 
   games: GameCard[] = [
     {
@@ -44,8 +53,8 @@ export class Home {
     },
     {
       id: 'zip', name: 'Zip', icon: 'route', emoji: '🔢',
-      description: 'Hubungkan semua angka secara berurutan dalam satu jalur yang mengisi seluruh papan. Segera hadir di Puzzle Games.',
-      route: '/zip', enabled: false, chips: ['Segera Hadir'],
+      description: 'Tarik satu jalur dari angka 1 sampai 36, lewati semua angka berurutan, dan isi seluruh papan 6×6 tanpa ada sel yang terlewat.',
+      route: '/zip', enabled: true, chips: ['Mudah', 'Sedang', 'Sulit', 'Harian'],
     },
   ];
 

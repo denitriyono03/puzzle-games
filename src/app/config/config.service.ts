@@ -49,6 +49,15 @@ export const FALLBACK_CONFIG: AppConfig = {
       ],
       maxHints: 3, showTimer: true, dailyPuzzle: true,
     },
+    zip: {
+      gridSize: 6,
+      difficulties: [
+        { id: 'easy', label: 'Mudah', givens: 4 },
+        { id: 'medium', label: 'Sedang', givens: 3 },
+        { id: 'hard', label: 'Sulit', givens: 2 },
+      ],
+      maxHints: 3, showTimer: true, dailyPuzzle: true,
+    },
   },
 };
 
@@ -61,7 +70,15 @@ export class ConfigService {
   async load(): Promise<void> {
     try {
       const cfg = await firstValueFrom(this.http.get<AppConfig>('config.json'));
-      if (cfg?.site && cfg?.theme) this.config = { ...FALLBACK_CONFIG, ...cfg };
+      if (cfg?.site && cfg?.theme) {
+        // Gabung dalam (khususnya `games`) agar config.json lama yang belum
+        // punya games.zip tidak merusak game Zip.
+        this.config = {
+          ...FALLBACK_CONFIG,
+          ...cfg,
+          games: { ...FALLBACK_CONFIG.games, ...cfg.games },
+        };
+      }
       this.loaded = true;
     } catch {
       // Tetap jalan dengan FALLBACK_CONFIG bila config.json gagal dimuat.

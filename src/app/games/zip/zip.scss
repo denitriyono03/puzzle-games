@@ -1,0 +1,184 @@
+.game-head {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 16px;
+  overflow: hidden;
+
+  mat-progress-bar { margin-top: 12px; }
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding-top: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+
+  mat-icon { color: var(--pg-primary); font-size: 1.2rem; width: 1.2rem; height: 1.2rem; }
+  &.best mat-icon { color: var(--pg-accent); }
+}
+
+.toolbar-card {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 20px;
+  padding: 12px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.difficulty { min-width: 200px; flex: 1 1 200px; margin-bottom: -1.25em; }
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 20px;
+  min-height: 380px;
+}
+
+.generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-weight: 600;
+  color: var(--pg-muted);
+}
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, 56px);
+  grid-auto-rows: 56px;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--pg-radius);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--pg-primary) 14%, var(--pg-card)), var(--pg-card));
+  border: 1px solid var(--pg-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Garis jalur (SVG) di bawah sel; sel yang dilewati tembus pandang sehingga garis terlihat. */
+.path-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+
+  polyline {
+    fill: none;
+    stroke: var(--pg-primary);
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.85;
+  }
+}
+
+.cell {
+  position: relative;
+  z-index: 2;
+  border: 2px solid var(--pg-border);
+  border-radius: 12px;
+  background: var(--pg-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  touch-action: none;
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+
+  &:hover:not(:disabled) { transform: scale(1.06); border-color: var(--pg-primary); }
+  &:focus-visible { outline: 2px solid var(--pg-secondary); outline-offset: 2px; }
+
+  &.in-path {
+    /* Tembus pandang (bukan campuran opaque) agar garis SVG di bawah sel tetap terlihat. */
+    background: color-mix(in srgb, var(--pg-primary) 22%, transparent);
+    border-color: color-mix(in srgb, var(--pg-primary) 55%, var(--pg-border));
+  }
+
+  &.clue {
+    background: var(--pg-surface);
+    cursor: default;
+  }
+
+  &.in-path.clue {
+    background: color-mix(in srgb, var(--pg-primary) 22%, transparent);
+  }
+
+  &.head {
+    border-color: var(--pg-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--pg-accent) 45%, transparent);
+  }
+
+  &.error {
+    border-color: var(--pg-error);
+    background: color-mix(in srgb, var(--pg-error) 16%, var(--pg-surface));
+    animation: shake 0.3s ease;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.clue-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--pg-primary);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 900;
+  font-family: var(--pg-font-heading);
+  line-height: 1;
+  user-select: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.step-num {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--pg-muted);
+  line-height: 1;
+  user-select: none;
+}
+
+.rules {
+  background: var(--pg-card);
+  border: 1px solid var(--pg-border);
+  margin-bottom: 8px;
+
+  h3 { margin: 0 0 8px; font-family: var(--pg-font-heading); }
+  ul { margin: 0; padding-left: 20px; color: var(--pg-muted); line-height: 1.7; font-size: 0.92rem; }
+}
+
+@media (max-width: 480px) {
+  .board { grid-template-columns: repeat(6, 46px); grid-auto-rows: 46px; gap: 5px; padding: 10px; }
+  .clue-num { width: 28px; height: 28px; font-size: 0.9rem; }
+  .step-num { font-size: 0.55rem; }
+  .difficulty { flex-basis: 100%; }
+}
