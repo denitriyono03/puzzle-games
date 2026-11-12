@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <mat-nav-list>
+    <mat-nav-list class="sidebar-nav">
       @for (item of config.config.navigation; track item.id) {
         @if (item.enabled) {
           <a mat-list-item [routerLink]="item.route" routerLinkActive="active"
@@ -48,14 +48,17 @@
             <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
             <span matListItemTitle>{{ item.label }}</span>
           </a>
-        } @else {
-          <a mat-list-item disabled>
-            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-            <span matListItemTitle>{{ item.label }}</span>
-            @if (item.badge) {
-              <mat-chip class="soon-chip" matListItemMeta>{{ item.badge }}</mat-chip>
-            }
-          </a>
+        }
+      }
+      @if (hasComingSoon()) {
+        <div class="nav-section">Segera Hadir</div>
+        @for (item of config.config.navigation; track item.id) {
+          @if (!item.enabled) {
+            <a mat-list-item disabled>
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+              <span matListItemTitle>{{ item.label }}</span>
+            </a>
+          }
         }
       }
     </mat-nav-list>
