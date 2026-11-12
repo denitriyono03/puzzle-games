@@ -259,7 +259,10 @@ export class ChatService {
       },
       {
         test: (n) =>
-          n.includes('tentang') || n.includes('situs ini') || n.includes('aplikasi ini') || n.includes('website ini') || n.includes('siapa yang buat'),
+          n.includes('tentang situs') || n.includes('tentang website') ||
+          n.includes('tentang aplikasi') || n.includes('tentang puzzle games') ||
+          n.includes('situs ini') || n.includes('aplikasi ini') ||
+          n.includes('website ini') || n.includes('siapa yang buat'),
         answer: () =>
           `${cfg.site.name} — ${cfg.site.tagline} ${cfg.site.description} Semua game berjalan lokal di browsermu, gratis dan tanpa iklan.`,
       },
@@ -273,7 +276,7 @@ export class ChatService {
           '• "Game apa saja?"\n' +
           '• "Skor & waktu terbaik"\n' +
           '• "Mode gelap"\n' +
-          'Kalau pertanyaannya di luar itu, aku akan coba jawab lewat Gemini (kalau API key sudah diatur).',
+          'Kalau pertanyaannya di luar itu, aku akan coba jawab lewat Gemini.',
       },
       {
         test: (n) => n.includes('terima kasih') || n.includes('makasih') || n.includes('thanks') || n.includes('thank you'),
