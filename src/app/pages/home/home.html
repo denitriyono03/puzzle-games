@@ -1,0 +1,75 @@
+<section class="hero">
+  <div class="hero-badge"><mat-icon>casino</mat-icon> Hub Game Teka-teki</div>
+  <h1 class="hero-title">
+    {{ config.config.site.name }}
+  </h1>
+  <p class="hero-tagline">{{ config.config.site.tagline }}</p>
+  <p class="hero-desc">{{ config.config.site.description }}</p>
+  <div class="hero-actions">
+    <a mat-raised-button color="accent" class="cta" routerLink="/tango">
+      <mat-icon>play_arrow</mat-icon> Main Tango
+    </a>
+    <a mat-stroked-button class="cta-secondary" routerLink="/tango" [queryParams]="{ mode: 'daily' }">
+      <mat-icon>calendar_today</mat-icon> Game Harian
+    </a>
+  </div>
+</section>
+
+<section class="stats" aria-label="Statistik">
+  <mat-card class="stat-card">
+    <mat-icon class="stat-icon">sports_esports</mat-icon>
+    <div class="stat-num">{{ enabledCount }}</div>
+    <div class="stat-label">Game Bisa Dimainkan</div>
+  </mat-card>
+  <mat-card class="stat-card">
+    <mat-icon class="stat-icon">check_circle</mat-icon>
+    <div class="stat-num">{{ solved }}</div>
+    <div class="stat-label">Puzzle Diselesaikan</div>
+  </mat-card>
+  <mat-card class="stat-card">
+    <mat-icon class="stat-icon">local_fire_department</mat-icon>
+    <div class="stat-num">{{ streak }} hari</div>
+    <div class="stat-label">Streak Harian Tango</div>
+  </mat-card>
+</section>
+
+<section class="games">
+  <h2 class="section-title">Pilih Game-mu</h2>
+  <div class="games-grid">
+    @for (game of games; track game.id) {
+      <mat-card class="game-card" [class.disabled]="!game.enabled">
+        <div class="game-emoji">{{ game.emoji }}</div>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>{{ game.icon }}</mat-icon>
+          <mat-card-title>{{ game.name }}</mat-card-title>
+          <mat-card-subtitle>{{ game.enabled ? 'Siap dimainkan' : 'Segera Hadir' }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ game.description }}</p>
+          <mat-chip-set>
+            @for (chip of game.chips; track chip) {
+              <mat-chip>{{ chip }}</mat-chip>
+            }
+          </mat-chip-set>
+        </mat-card-content>
+        <mat-card-actions>
+          @if (game.enabled) {
+            <a mat-raised-button color="primary" [routerLink]="game.route">Main Sekarang</a>
+          } @else {
+            <button mat-stroked-button disabled>Segera Hadir</button>
+          }
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</section>
+
+<section class="how">
+  <h2 class="section-title">Cara Main Tango</h2>
+  <div class="how-grid">
+    <mat-card><mat-card-content><div class="how-num">1</div><h3>Klik sel</h3><p>Ketuk sel untuk mengganti: kosong → ☀️ → 🌙 → kosong.</p></mat-card-content></mat-card>
+    <mat-card><mat-card-content><div class="how-num">2</div><h3>Ikuti aturan</h3><p>Tiap baris &amp; kolom tepat 3 matahari dan 3 bulan, maks 2 simbol sama berurutan.</p></mat-card-content></mat-card>
+    <mat-card><mat-card-content><div class="how-num">3</div><h3>Patuhi tanda</h3><p>Tanda = berarti kedua sel sama, tanda × berarti berbeda.</p></mat-card-content></mat-card>
+    <mat-card><mat-card-content><div class="how-num">4</div><h3>Menang!</h3><p>Isi semua sel dengan benar dan kalahkan waktu terbaikmu.</p></mat-card-content></mat-card>
+  </div>
+</section>

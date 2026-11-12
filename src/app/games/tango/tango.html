@@ -1,0 +1,103 @@
+<mat-card class="game-head">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>wb_sunny</mat-icon>
+    <mat-card-title>Tango ☀️🌙</mat-card-title>
+    <mat-card-subtitle>
+      @if (isDaily) {
+        Game Harian — teka-teki baru setiap hari, sama untuk semua pemain.
+      } @else {
+        Isi grid dengan matahari dan bulan. Tiap baris &amp; kolom tepat 3 ☀️ dan 3 🌙.
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="stats-row">
+    @if (cfg.showTimer) {
+      <div class="stat"><mat-icon>timer</mat-icon><span>{{ fmt(seconds) }}</span></div>
+    }
+    <div class="stat"><mat-icon>mouse</mat-icon><span>{{ moves }} langkah</span></div>
+    <div class="stat"><mat-icon>grid_on</mat-icon><span>{{ filledCount }}/36 terisi</span></div>
+    @if (bestTime !== null) {
+      <div class="stat best"><mat-icon>emoji_events</mat-icon><span>Terbaik: {{ fmt(bestTime) }}</span></div>
+    }
+    @if (isDaily && streak > 0) {
+      <div class="stat best"><mat-icon>local_fire_department</mat-icon><span>Streak: {{ streak }} hari</span></div>
+    }
+  </mat-card-content>
+  <mat-progress-bar mode="determinate" [value]="filledCount / 36 * 100"></mat-progress-bar>
+</mat-card>
+
+<mat-card class="toolbar-card">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="difficulty">
+      <mat-label>Tingkat Kesulitan</mat-label>
+      <mat-select [value]="difficultyId" [disabled]="isDaily" (selectionChange)="newGame($event.value)">
+        @for (d of difficulties; track d.id) {
+          <mat-option [value]="d.id">{{ d.label }} ({{ d.givens }} petunjuk)</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="newGame(difficultyId)" [disabled]="generating">
+      <mat-icon>refresh</mat-icon> Baru
+    </button>
+    <button mat-stroked-button (click)="startDaily()" [disabled]="generating" [color]="isDaily ? 'accent' : undefined">
+      <mat-icon>calendar_today</mat-icon> Harian
+    </button>
+    <button mat-stroked-button (click)="hint()" [disabled]="hintsLeft === 0 || won || generating" matTooltip="Isi satu sel yang benar">
+      <mat-icon>lightbulb</mat-icon> Petunjuk ({{ hintsLeft }})
+    </button>
+    <button mat-stroked-button (click)="undo()" [disabled]="won || generating" matTooltip="Batalkan langkah terakhir">
+      <mat-icon>undo</mat-icon> Urungkan
+    </button>
+    <button mat-stroked-button (click)="reset()" [disabled]="generating">
+      <mat-icon>restart_alt</mat-icon> Ulangi
+    </button>
+    <button mat-raised-button color="accent" (click)="check()" [disabled]="generating">
+      <mat-icon>check_circle</mat-icon> Periksa
+    </button>
+  </div>
+</mat-card>
+
+<div class="board-wrap">
+  @if (generating) {
+    <div class="generating">
+      <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
+      <p>Membuat puzzle baru…</p>
+    </div>
+  } @else {
+    <div class="board" role="grid" aria-label="Papan Tango 6x6">
+      @for (row of board; track $index; let r = $index) {
+        @for (v of row; track $index; let c = $index) {
+          <button class="cell"
+            [class.sun]="v === 1" [class.moon]="v === 2"
+            [class.given]="givenMask[r][c]" [class.hint]="hintMask[r][c]"
+            [class.error]="badCells.has(r + ',' + c)"
+            [disabled]="givenMask[r][c] || hintMask[r][c] || won"
+            (click)="cycleCell(r, c)"
+            [attr.aria-label]="'Baris ' + (r + 1) + ' kolom ' + (c + 1)">
+            @if (v === 1) { <span class="symbol sun-symbol">☀️</span> }
+            @if (v === 2) { <span class="symbol moon-symbol">🌙</span> }
+            @if (rightEdge[r + ',' + c]; as k) {
+              <span class="constraint right" [class.eq]="k.type === 'eq'">{{ k.type === 'eq' ? '=' : '×' }}</span>
+            }
+            @if (bottomEdge[r + ',' + c]; as k) {
+              <span class="constraint bottom" [class.eq]="k.type === 'eq'">{{ k.type === 'eq' ? '=' : '×' }}</span>
+            }
+          </button>
+        }
+      }
+    </div>
+  }
+</div>
+
+<mat-card class="rules">
+  <mat-card-content>
+    <h3>Aturan Main</h3>
+    <ul>
+      <li>Klik sel untuk mengganti: kosong → ☀️ → 🌙 → kosong.</li>
+      <li>Tiap baris dan kolom harus berisi tepat 3 matahari dan 3 bulan.</li>
+      <li>Tidak boleh ada 3 simbol yang sama berurutan di baris atau kolom.</li>
+      <li>Tanda <strong>=</strong> berarti kedua sel bersebelahan harus sama; tanda <strong>×</strong> berarti harus berbeda.</li>
+      <li>Sel abu-abu dengan simbol adalah petunjuk awal dan tidak bisa diubah.</li>
+    </ul>
+  </mat-card-content>
+</mat-card>

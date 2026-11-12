@@ -1,0 +1,98 @@
+<mat-toolbar class="topbar" color="primary">
+  @if (isHandset()) {
+    <button mat-icon-button (click)="sidenav.toggle()" aria-label="Buka menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+  <a class="brand" routerLink="/" (click)="navClicked()">
+    <span class="brand-logo">{{ config.config.site.logo }}</span>
+    <span class="brand-name">{{ config.config.site.name }}</span>
+  </a>
+  <span class="spacer"></span>
+  @if (!isHandset()) {
+    <nav class="topnav">
+      @for (item of config.config.navigation; track item.id) {
+        @if (item.enabled) {
+          <a mat-button [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.route === '/' }">{{ item.label }}</a>
+        }
+      }
+    </nav>
+  }
+  <button mat-icon-button (click)="theme.toggle()" [matTooltip]="theme.dark() ? 'Mode terang' : 'Mode gelap'" [attr.aria-label]="theme.dark() ? 'Mode terang' : 'Mode gelap'">
+    <mat-icon>{{ theme.dark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+  <a mat-icon-button [href]="config.config.site.github" target="_blank" rel="noopener" matTooltip="GitHub" aria-label="GitHub">
+    <mat-icon>code</mat-icon>
+  </a>
+</mat-toolbar>
+
+<mat-sidenav-container class="shell">
+  <mat-sidenav #sidenav class="sidebar"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [fixedInViewport]="isHandset()"
+    fixedTopGap="64">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-emoji">{{ config.config.site.logo }}</span>
+      <div>
+        <div class="sidebar-logo-name">{{ config.config.site.name }}</div>
+        <div class="sidebar-logo-tag">{{ config.config.site.tagline }}</div>
+      </div>
+    </div>
+
+    <mat-nav-list>
+      @for (item of config.config.navigation; track item.id) {
+        @if (item.enabled) {
+          <a mat-list-item [routerLink]="item.route" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: item.route === '/' }" (click)="navClicked()">
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        } @else {
+          <a mat-list-item disabled>
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+            @if (item.badge) {
+              <mat-chip class="soon-chip" matListItemMeta>{{ item.badge }}</mat-chip>
+            }
+          </a>
+        }
+      }
+    </mat-nav-list>
+
+    <div class="sidebar-spacer"></div>
+
+    <mat-card class="daily-card">
+      <div class="daily-head">
+        <mat-icon>calendar_today</mat-icon>
+        <div>
+          <div class="daily-title">Game Harian</div>
+          <div class="daily-sub">Tantangan Tango hari ini</div>
+        </div>
+      </div>
+      <mat-card-content>
+        <p>Satu teka-teki baru setiap hari. Selesaikan dan jaga streak-mu!</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" routerLink="/tango" [queryParams]="{ mode: 'daily' }" (click)="navClicked()">
+          Main Hari Ini
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="sidebar-footer">v{{ config.config.site.version }} · Angular</div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
+        <p>Memuat Tango…</p>
+      </div>
+    }
+    <div class="page">
+      <router-outlet></router-outlet>
+    </div>
+    <footer class="app-footer">{{ config.config.site.footer }}</footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

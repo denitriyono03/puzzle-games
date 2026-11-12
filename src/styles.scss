@@ -1,0 +1,109 @@
+@use '@angular/material' as mat;
+// Font self-hosted (Fontsource) — tidak bergantung pada Google Fonts saat runtime.
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+@import '@fontsource/material-icons/index.css';
+
+:root {
+  --pg-primary: #7c5cff;
+  --pg-secondary: #22d3ee;
+  --pg-accent: #fbbf24;
+  --pg-background: #f3f4fa;
+  --pg-surface: #ffffff;
+  --pg-card: #ffffff;
+  --pg-text: #1d1b2e;
+  --pg-muted: #6b7280;
+  --pg-border: #e4e6f0;
+  --pg-success: #16a34a;
+  --pg-warning: #d97706;
+  --pg-error: #dc2626;
+  --pg-radius: 16px;
+  --pg-font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --pg-font-body: 'Inter', system-ui, sans-serif;
+  --pg-bg-image: url('/puzzle-games/images/bg.jpg');
+  --pg-overlay-opacity: 0.82;
+  --pg-blur: 6px;
+  --pg-sidebar-width: 264px;
+  --pg-topbar-height: 64px;
+  --pg-content-max-width: 1180px;
+}
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: (
+      plain-family: ('Inter', system-ui, sans-serif),
+      brand-family: ('Plus Jakarta Sans', system-ui, sans-serif),
+    ),
+    density: 0,
+  ));
+}
+
+body.dark {
+  color-scheme: dark;
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+  ));
+}
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--pg-font-body);
+  background-color: var(--pg-background);
+  color: var(--pg-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Gambar latar dari config.json, ditutup overlay warna latar. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--pg-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: calc(1 - var(--pg-overlay-opacity));
+  filter: blur(var(--pg-blur));
+}
+
+h1, h2, h3 { font-family: var(--pg-font-heading); }
+
+/* Aturan kelas .material-icons (biasanya datang dari stylesheet Google Fonts;
+   Fontsource hanya menyediakan @font-face, jadi didefinisikan sendiri). */
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+}
+
+/* Samakan warna permukaan Material dengan tema config. */
+.mat-mdc-card { --mdc-elevated-card-container-color: var(--pg-card); }
+.mat-drawer, .mat-sidenav { --mat-sidenav-container-background-color: var(--pg-surface); }
