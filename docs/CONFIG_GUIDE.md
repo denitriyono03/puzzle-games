@@ -234,7 +234,8 @@ ke Gemini — hanya bila API key tersedia.
 | `botName` | string | `"Puzzle Bot"` | Nama bot di header popup |
 | `welcomeMessage` | string | `"Halo! 👋 ..."` | Pesan pembuka saat riwayat kosong |
 | `geminiModel` | string | `"gemini-3.5-flash-lite"` | Model Gemini (free tier, paling murah) |
-| `geminiApiKey` | string | `""` | **Biarkan kosong di repo publik** (lihat Keamanan di bawah) |
+| `geminiApiKey` | string | `""` | Key pemilik, hanya bila tidak memakai proxy (lihat Keamanan di bawah) |
+| `proxyUrl` | string | `""` | URL Cloudflare Worker proxy, mis. `https://puzzle-bot-proxy.<subdomain>.workers.dev/chat` — kalau diisi, pengunjung tidak perlu memasukkan key (lihat `worker/README.md`) |
 | `useGemini` | boolean | `true` | `false` = hanya bot terprogram, tanpa Gemini |
 | `maxHistoryMessages` | number | `6` | Jumlah pesan terakhir yang dikirim ke Gemini |
 | `quickReplies` | string[] | `["Cara main Tango", ...]` | Chip balasan cepat di atas kolom chat |
@@ -246,17 +247,24 @@ popup chat) dan didahulukan atas `chat.geminiApiKey` dari config.
 
 ## Keamanan — API key Gemini
 
-**JANGAN PERNAH menulis API key Gemini asli ke repo ini.** Repo ini publik —
-key yang ter-commit bisa dipakai siapa saja dan menghabiskan kuotamu.
+**Key Gemini pemilik situs disimpan sebagai secret di Cloudflare Worker
+(`GEMINI_API_KEY`), bukan di repo ini.** Cara yang dipakai sekarang:
 
-- Cara yang aman (dipakai sekarang): `chat.geminiApiKey` dikosongkan.
-  Pengunjung yang mau memakai Gemini memasukkan key-nya sendiri lewat ikon ⚙️
-  di popup chat; key itu hanya tersimpan di `localStorage` browsernya.
-- Kalau pemilik situs mau key aktif untuk semua pengunjung: batasi dulu key
-  itu di Google Cloud Console → Credentials → key tersebut → **API restrictions:
-  Generative Language API saja** dan **Application restrictions: HTTP referrers
-  `https://denitriyono03.github.io/*`**. Setelah dibatasi, barulah isi
-  `chat.geminiApiKey` di `config.json` (dan ingat: key itu tetap terlihat oleh
-  siapa pun yang membuka config.json — pembatasan referrer adalah pengamannya).
-- Kalau key bocor/ter-commit tanpa sengaja: hapus key itu di Google Cloud
-  Console dan buat key baru.
+1. **Mode proxy (aktif bila `chat.proxyUrl` diisi):** key hanya ada di
+   dashboard Cloudflare sebagai secret; situs memanggil Worker, Worker yang
+   memanggil Gemini. Key tidak pernah sampai ke browser pengunjung dan tidak
+   ada di repo. Deploy Worker mengikuti `worker/README.md`.
+2. **Mode langsung (`proxyUrl` kosong):** pengunjung yang mau memakai Gemini
+   memasukkan key-nya sendiri lewat ikon ⚙️ di popup chat; key itu hanya
+   tersimpan di `localStorage` browsernya.
+
+Catatan: sempat ada percobaan menulis key ke `public/config.json` pada
+12 Nov 2026 atas perintah pemilik, tetapi push-nya ditolak GitHub Secret
+Scanning — key tidak pernah masuk repo. Jangan ulangi percobaan itu:
+sekali key ter-commit ke repo publik, menghapusnya dari file saja tidak
+cukup karena riwayat commit tetap menyimpan key lama.
+
+Kalau key disalahgunakan / kuota habis mendadak: hapus key itu di Google
+Cloud Console, buat key baru, lalu perbarui secret `GEMINI_API_KEY` di
+Worker (`npx wrangler secret put GEMINI_API_KEY`) — tidak perlu mengubah
+repo.

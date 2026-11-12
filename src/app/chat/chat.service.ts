@@ -129,8 +129,9 @@ export class ChatService {
       return;
     }
 
-    const key = this.resolveGeminiKey();
-    if (!key) {
+    const proxyUrl = (this.config.config.chat.proxyUrl ?? '').trim();
+    const key = proxyUrl ? '' : this.resolveGeminiKey();
+    if (!proxyUrl && !key) {
       await this.delay(400);
       this.typing.set(false);
       this.pushBot(
@@ -350,6 +351,10 @@ export class ChatService {
 
   private async askGemini(text: string): Promise<string> {
     const cfg = this.config.config.chat;
+    const proxyUrl = (cfg.proxyUrl ?? '').trim();
+    // Mode proxy: key disimpan sebagai secret di Worker, browser tidak butuh key.
+    if (proxyUrl) return this.askGeminiViaProxy(text, proxyUrl);
+
     const key = this.resolveGeminiKey();
     const model = cfg.geminiModel || 'gemini-3.5-flash-lite';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
@@ -403,6 +408,38 @@ export class ChatService {
     return reply;
   }
 
+  private async askGeminiViaProxy(text: string, proxyUrl: string): Promise<string> {
+    const cfg = this.config.config.chat;
+    const history = this.messages()
+      .slice(0, -1) // pesan terakhir adalah pertanyaan saat ini — ditambahkan sebagai message
+      .slice(-cfg.maxHistoryMessages)
+      .map((m) => ({ role: m.role === 'user' ? 'user' : 'model', text: m.text }));
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({ message: text, history, context: this.siteContext() }),
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+
+    if (!res.ok) {
+      const err = new Error(`Proxy HTTP ${res.status}`) as Error & { status?: number };
+      err.status = res.status;
+      throw err;
+    }
+    const data = (await res.json()) as { reply?: string; error?: string };
+    const reply = (data.reply ?? '').trim();
+    if (!reply) throw new Error(data.error ?? 'Proxy empty reply');
+    return reply;
+  }
+
   private geminiErrorMessage(err: unknown): string {
     const status = (err as { status?: number })?.status;
     const name = (err as { name?: string })?.name;
@@ -410,7 +447,10 @@ export class ChatService {
       return 'Waduh, Gemini terlalu lama merespons (timeout). Coba tanyakan lagi, atau pakai pertanyaan cepat di atas — misalnya "cara main Tango" atau "game harian".';
     }
     if (status === 401 || status === 403) {
-      return 'API key Gemini ditolak (401/403). Periksa lagi key-nya lewat ikon ⚙️ di atas — pastikan key benar dan masih aktif.';
+      const viaProxy = Boolean((this.config.config.chat.proxyUrl ?? '').trim());
+      return viaProxy
+        ? 'Server proxy Gemini menolak permintaan (401/403). Mungkin secret key di Worker belum diset — coba lagi nanti.'
+        : 'API key Gemini ditolak (401/403). Periksa lagi key-nya lewat ikon ⚙️ di atas — pastikan key benar dan masih aktif.';
     }
     if (status === 429) {
       return 'Gemini sedang sibuk / batas kuota gratis tercapai (429). Coba lagi sebentar lagi, atau tanya seputar situs ini — misalnya "cara main Zip" atau "skor".';
