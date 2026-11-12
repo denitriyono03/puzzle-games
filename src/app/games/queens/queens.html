@@ -1,0 +1,99 @@
+<mat-card class="game-head">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>grid_on</mat-icon>
+    <mat-card-title>Queens 👑</mat-card-title>
+    <mat-card-subtitle>
+      @if (isDaily) {
+        Game Harian — teka-teki baru setiap hari, sama untuk semua pemain.
+      } @else {
+        Tempatkan satu ratu di tiap baris, kolom, dan wilayah warna — tanpa ada ratu yang saling menyerang.
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="stats-row">
+    @if (cfg.showTimer) {
+      <div class="stat"><mat-icon>timer</mat-icon><span>{{ fmt(seconds) }}</span></div>
+    }
+    <div class="stat"><mat-icon>mouse</mat-icon><span>{{ moves }} langkah</span></div>
+    <div class="stat"><mat-icon>emoji_events</mat-icon><span>{{ queenCount }}/{{ size }} ratu</span></div>
+    @if (bestTime !== null) {
+      <div class="stat best"><mat-icon>emoji_events</mat-icon><span>Terbaik: {{ fmt(bestTime) }}</span></div>
+    }
+    @if (isDaily && streak > 0) {
+      <div class="stat best"><mat-icon>local_fire_department</mat-icon><span>Streak: {{ streak }} hari</span></div>
+    }
+  </mat-card-content>
+  <mat-progress-bar mode="determinate" [value]="queenCount / size * 100"></mat-progress-bar>
+</mat-card>
+
+<mat-card class="toolbar-card">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="difficulty">
+      <mat-label>Tingkat Kesulitan</mat-label>
+      <mat-select [value]="difficultyId" [disabled]="isDaily" (selectionChange)="newGame($event.value)">
+        @for (d of difficulties; track d.id) {
+          <mat-option [value]="d.id">{{ d.label }} ({{ d.size }}×{{ d.size }})</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="newGame(difficultyId)" [disabled]="generating">
+      <mat-icon>refresh</mat-icon> Baru
+    </button>
+    <button mat-stroked-button (click)="startDaily()" [disabled]="generating" [color]="isDaily ? 'accent' : undefined">
+      <mat-icon>calendar_today</mat-icon> Harian
+    </button>
+    <button mat-stroked-button (click)="hint()" [disabled]="hintsLeft === 0 || won || generating" matTooltip="Pasang satu ratu solusi">
+      <mat-icon>lightbulb</mat-icon> Petunjuk ({{ hintsLeft }})
+    </button>
+    <button mat-stroked-button (click)="undo()" [disabled]="won || generating" matTooltip="Batalkan langkah terakhir">
+      <mat-icon>undo</mat-icon> Urungkan
+    </button>
+    <button mat-stroked-button (click)="reset()" [disabled]="generating">
+      <mat-icon>restart_alt</mat-icon> Ulangi
+    </button>
+    <button mat-raised-button color="accent" (click)="check()" [disabled]="generating">
+      <mat-icon>check_circle</mat-icon> Periksa
+    </button>
+  </div>
+</mat-card>
+
+<div class="board-wrap">
+  @if (generating) {
+    <div class="generating">
+      <mat-progress-spinner mode="indeterminate" diameter="56"></mat-progress-spinner>
+      <p>Membuat puzzle baru…</p>
+    </div>
+  } @else {
+    <div class="board" [ngClass]="'size-' + size" role="grid" [attr.aria-label]="'Papan Queens ' + size + 'x' + size">
+      @for (row of regions; track $index; let r = $index) {
+        @for (region of row; track $index; let c = $index) {
+          <button class="cell" data-cell
+            [attr.data-r]="r" [attr.data-c]="c"
+            [ngClass]="edgeClasses(r, c)"
+            [style.background]="regionBg(r, c)"
+            [class.error]="badCells.has(r + ',' + c)"
+            (click)="tap(r, c)"
+            [attr.aria-label]="'Baris ' + (r + 1) + ' kolom ' + (c + 1) + ', wilayah ' + (region + 1) + (grid[r * size + c] === 1 ? ', ratu' : grid[r * size + c] === 2 ? ', tanda silang' : '')">
+            @if (grid[r * size + c] === 1) {
+              <span class="queen" aria-hidden="true">👑</span>
+            } @else if (grid[r * size + c] === 2) {
+              <span class="xmark" aria-hidden="true">✕</span>
+            }
+          </button>
+        }
+      }
+    </div>
+  }
+</div>
+
+<mat-card class="rules">
+  <mat-card-content>
+    <h3>Aturan Main</h3>
+    <ul>
+      <li>Ketuk sel untuk mengganti: kosong → ratu 👑 → tanda silang ✕ → kosong. Tanda silang untuk menandai sel yang pasti bukan ratu.</li>
+      <li>Tiap baris, tiap kolom, dan tiap wilayah warna harus berisi <strong>tepat satu ratu</strong>.</li>
+      <li>Tidak ada dua ratu yang boleh bersebelahan — termasuk secara diagonal.</li>
+      <li>Pasang semua {{ size }} ratu dengan benar untuk menang. Sel yang melanggar aturan ditandai merah.</li>
+    </ul>
+  </mat-card-content>
+</mat-card>

@@ -193,6 +193,35 @@ yang `disabled` tampil abu-abu + badge).
 | `showTimer` | Tampilkan timer & mulai hitung saat langkah pertama |
 | `dailyPuzzle` | Aktifkan tombol & route Game Harian (`/zip?mode=daily`) |
 
+## `games.queens`
+
+```jsonc
+"games": {
+  "queens": {
+    "difficulties": [
+      { "id": "easy",   "label": "Mudah", "size": 6 },
+      { "id": "medium", "label": "Sedang", "size": 7 },
+      { "id": "hard",   "label": "Sulit",  "size": 8 }
+    ],
+    "maxHints": 3,
+    "showTimer": true,
+    "dailyPuzzle": true
+  }
+}
+```
+
+| Kunci | Keterangan |
+|---|---|
+| `difficulties[]` | Daftar level: `id` (disimpan untuk waktu terbaik), `label`, `size` = ukuran papan (6, 7, atau 8 — sekaligus jumlah ratu yang harus dipasang). Makin besar papan, makin sulit |
+| `maxHints` | Jumlah petunjuk per permainan |
+| `showTimer` | Tampilkan timer & mulai hitung saat langkah pertama |
+| `dailyPuzzle` | Aktifkan tombol & route Game Harian (`/queens?mode=daily`) |
+
+> Generator Queens di-port dari PuzzleVerse (`src/games/queens.ts`): satu
+> permutasi ratu valid + wilayah warna yang ditumbuhkan dari tiap sel ratu.
+> Kemenangan dinilai dari aturan (bukan dari solusi tersimpan), jadi puzzle
+> tidak perlu diverifikasi unik.
+
 ## Mengaktifkan / menonaktifkan game
 
 Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kode:
@@ -217,7 +246,9 @@ Satu game dinyalakan atau dimatikan hanya lewat `config.json` — tanpa ubah kod
 | `pg-tango-daily-streak` / `pg-tango-daily-last` | Streak & tanggal terakhir game harian Tango selesai |
 | `pg-zip-best-<difficultyId>` | Waktu terbaik (detik) per level Zip |
 | `pg-zip-daily-streak` / `pg-zip-daily-last` | Streak & tanggal terakhir game harian Zip selesai |
-| `pg-stats-solved` | Total puzzle (Tango + Zip) yang diselesaikan (tampil di beranda) |
+| `pg-queens-best-<difficultyId>` | Waktu terbaik (detik) per level Queens |
+| `pg-queens-daily-streak` / `pg-queens-daily-last` | Streak & tanggal terakhir game harian Queens selesai |
+| `pg-stats-solved` | Total puzzle (Tango + Zip + Queens) yang diselesaikan (tampil di beranda) |
 | `pg-chat-history` | Riwayat chat dengan bot (maks 20 pesan terakhir) |
 | `pg-gemini-key` | API key Gemini milik pengunjung, diisi lewat popup chat (tidak pernah dari repo) |
 

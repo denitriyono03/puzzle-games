@@ -48,8 +48,8 @@ export class Home implements OnInit {
     },
     {
       id: 'queens', name: 'Queens', icon: 'grid_on', emoji: '👑',
-      description: 'Tempatkan satu ratu di tiap baris, kolom, dan wilayah warna — tanpa ada ratu yang saling menyerang. Segera hadir di Puzzle Games.',
-      route: '/queens', enabled: false, chips: ['Segera Hadir'],
+      description: 'Tempatkan satu ratu di tiap baris, kolom, dan wilayah warna — tanpa ada ratu yang saling menyerang, termasuk secara diagonal.',
+      route: '/queens', enabled: true, chips: ['Mudah', 'Sedang', 'Sulit', 'Harian'],
     },
     {
       id: 'zip', name: 'Zip', icon: 'route', emoji: '🔢',

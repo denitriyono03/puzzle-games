@@ -174,7 +174,7 @@ export class ChatService {
     const gameNames = games.map((g) => g.label).join(', ');
     const comingNames = coming.map((g) => g.label).join(', ');
     const dailyLinks =
-      'Tango Harian: [Main Tango Harian](route:/tango?mode=daily) · Zip Harian: [Main Zip Harian](route:/zip?mode=daily)';
+      'Tango Harian: [Main Tango Harian](route:/tango?mode=daily) · Zip Harian: [Main Zip Harian](route:/zip?mode=daily) · Queens Harian: [Main Queens Harian](route:/queens?mode=daily)';
 
     return [
       {
@@ -183,7 +183,7 @@ export class ChatService {
           n.includes('halo') || n.includes('selamat pagi') || n.includes('selamat siang') ||
           n.includes('selamat sore') || n.includes('selamat malam') || n.includes('assalamu'),
         answer: () =>
-          `Halo juga! 👋 Aku ${cfg.chat.botName}. Aku bisa bantu seputar Puzzle Games — cara main Tango & Zip, game harian, skor dan waktu terbaik, atau pengaturan tema. Silakan tanya!`,
+          `Halo juga! 👋 Aku ${cfg.chat.botName}. Aku bisa bantu seputar Puzzle Games — cara main Tango, Zip & Queens, game harian, skor dan waktu terbaik, atau pengaturan tema. Silakan tanya!`,
       },
       {
         test: (n) =>
@@ -221,9 +221,14 @@ export class ChatService {
       },
       {
         test: (n) =>
-          n.includes('queens'),
+          n.includes('queens') && (n.includes('cara') || n.includes('main') || n.includes('aturan') || n.includes('rule') || n.includes('gimana') || n.includes('bagaimana') || n.includes('panduan')),
         answer: () =>
-          'Queens 👑 masih "Segera Hadir" — belum bisa dimainkan. Di Queens nanti kamu menempatkan satu ratu di tiap baris, kolom, dan wilayah warna tanpa ada ratu yang saling menyerang. Sementara itu, Tango dan Zip sudah bisa dimainkan!',
+          'Cara main Queens 👑:\n' +
+          '• Papan dibagi jadi beberapa wilayah warna. Ketuk sel untuk mengganti: kosong → ratu 👑 → tanda silang ✕ → kosong.\n' +
+          '• Tiap baris, tiap kolom, dan tiap wilayah warna harus berisi tepat satu ratu.\n' +
+          '• Tidak ada dua ratu yang boleh bersebelahan — termasuk secara diagonal.\n' +
+          '• Pasang semua ratu (6 di Mudah, 7 di Sedang, 8 di Sulit) dengan benar untuk menang.\n' +
+          'Ada tombol Petunjuk (maks 3), Urungkan, dan Periksa di atas papan. Selamat bermain!',
       },
       {
         test: (n) =>
@@ -232,7 +237,7 @@ export class ChatService {
         answer: () =>
           `Game yang bisa dimainkan sekarang: ${gameNames}.` +
           (comingNames ? ` Segera hadir: ${comingNames}.` : '') +
-          ' Tango itu teka-teki matahari & bulan, Zip itu teka-teki jalur angka 1–36.',
+          ' Tango itu teka-teki matahari & bulan, Zip itu teka-teki jalur angka 1–36, Queens itu teka-teki menempatkan ratu di wilayah warna.',
       },
       {
         test: (n) => n.includes('gelap') || n.includes('terang') || n.includes('dark') || n.includes('mode malam') || n.includes('mode terang'),
@@ -271,7 +276,7 @@ export class ChatService {
           n.includes('bantu') || n.includes('help') || n.includes('bisa apa') || n.includes('bisa jawab apa') || n.includes('perintah'),
         answer: () =>
           'Aku bisa bantu seputar situs ini, misalnya:\n' +
-          '• "Cara main Tango" / "Cara main Zip"\n' +
+          '• "Cara main Tango" / "Cara main Zip" / "Cara main Queens"\n' +
           '• "Game harian"\n' +
           '• "Game apa saja?"\n' +
           '• "Skor & waktu terbaik"\n' +
@@ -313,11 +318,12 @@ export class ChatService {
     const solved = read('pg-stats-solved') ?? 0;
     const tangoStreak = read('pg-tango-daily-streak') ?? 0;
     const zipStreak = read('pg-zip-daily-streak') ?? 0;
+    const queensStreak = read('pg-queens-daily-streak') ?? 0;
     const diffs = this.config.config.games.tango.difficulties;
     const label = (id: string) => diffs.find((d) => d.id === id)?.label ?? id;
 
     const lines: string[] = [`Puzzle selesai (total): ${solved}`];
-    lines.push(`Streak harian — Tango: ${tangoStreak} hari · Zip: ${zipStreak} hari`);
+    lines.push(`Streak harian — Tango: ${tangoStreak} hari · Zip: ${zipStreak} hari · Queens: ${queensStreak} hari`);
     const tangoBest = ['easy', 'medium', 'hard']
       .map((id) => `${label(id)}: ${fmtTime(read(`pg-tango-best-${id}`))}`)
       .join(' · ');
@@ -326,6 +332,10 @@ export class ChatService {
       .map((id) => `${label(id)}: ${fmtTime(read(`pg-zip-best-${id}`))}`)
       .join(' · ');
     lines.push(`Waktu terbaik Zip — ${zipBest}`);
+    const queensBest = ['easy', 'medium', 'hard']
+      .map((id) => `${label(id)}: ${fmtTime(read(`pg-queens-best-${id}`))}`)
+      .join(' · ');
+    lines.push(`Waktu terbaik Queens — ${queensBest}`);
     if (solved === 0) {
       lines.push('Kamu belum menyelesaikan puzzle di browser ini — ayo main satu!');
     }
@@ -347,7 +357,8 @@ export class ChatService {
       games,
       'Aturan Tango: grid 6x6, klik sel kosong -> matahari -> bulan; tiap baris dan kolom tepat 3 matahari dan 3 bulan; tidak boleh 3 simbol sama berurutan; tanda = berarti sel bersebelahan sama, tanda x berarti berbeda; sel abu-abu adalah petunjuk awal yang terkunci.',
       'Aturan Zip: grid 6x6, tarik satu jalur dari angka 1 sampai 36 berurutan; jalur hanya bergerak ortogonal (atas/bawah/kiri/kanan), tidak boleh kembali ke sel yang sudah dilewati; isi seluruh papan dan akhiri di angka tertinggi.',
-      'Fitur: game harian (satu teka-teki baru tiap hari, sama untuk semua pemain, di /tango?mode=daily dan /zip?mode=daily), Petunjuk maks 3 per game, Urungkan, Ulangi, Periksa, timer, waktu terbaik per level kesulitan (Mudah/Sedang/Sulit) dan streak harian tersimpan di localStorage browser.',
+      'Aturan Queens: papan 6x6 (Mudah), 7x7 (Sedang) atau 8x8 (Sulit) dibagi wilayah warna; ketuk sel untuk mengganti kosong -> ratu -> tanda silang; tiap baris, kolom dan wilayah warna tepat satu ratu; tidak ada dua ratu yang bersebelahan termasuk diagonal; pasang semua ratu untuk menang.',
+      'Fitur: game harian (satu teka-teki baru tiap hari, sama untuk semua pemain, di /tango?mode=daily, /zip?mode=daily dan /queens?mode=daily), Petunjuk maks 3 per game, Urungkan, Ulangi, Periksa, timer, waktu terbaik per level kesulitan (Mudah/Sedang/Sulit) dan streak harian tersimpan di localStorage browser.',
       'Pengaturan: mode gelap/terang via tombol di topbar; tampilan diatur dari satu file config.json.',
     ].join('\n');
   }
