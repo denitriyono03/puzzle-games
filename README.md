@@ -37,10 +37,12 @@ dan **Zip** (satu jalur angka ala LinkedIn) yang sepenuhnya bisa dimainkan;
   game) dijawab langsung oleh bot terprogram; pertanyaan lain diteruskan ke
   Gemini (`gemini-3.5-flash-lite`, model free tier termurah) dengan instruksi
   sistem agar hanya menjawab seputar situs ini. API key Gemini **tidak pernah**
-  di-commit ke repo publik ini — pengunjung memasukkannya sendiri lewat ikon ⚙️
-  di popup chat (tersimpan di `localStorage` browsernya), atau pemilik situs
-  mengisinya di `config.json` setelah membatasi key di Google Cloud Console
-  (lihat bagian Keamanan di [`docs/CONFIG_GUIDE.md`](docs/CONFIG_GUIDE.md)).
+  di-commit ke repo publik ini — cara yang dipakai adalah proxy Cloudflare
+  Worker (`worker/`, key disimpan sebagai secret di Cloudflare; aktifkan
+  dengan mengisi `chat.proxyUrl` di `config.json`), atau pengunjung
+  memasukkannya sendiri lewat ikon ⚙️ di popup chat (tersimpan di
+  `localStorage` browsernya). Lihat bagian Keamanan di
+  [`docs/CONFIG_GUIDE.md`](docs/CONFIG_GUIDE.md).
   Riwayat chat tersimpan lokal (maks 20 pesan) dan bisa dihapus.
 
 ## Menjalankan

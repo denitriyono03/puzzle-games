@@ -64,6 +64,8 @@ export interface ChatConfig {
   geminiModel: string;
   /** Kosongkan di repo publik — key diisi pengunjung lewat popup chat (localStorage). */
   geminiApiKey: string;
+  /** URL Cloudflare Worker proxy (opsional). Kalau diisi, chat memakai proxy dan key tidak diperlukan di browser. */
+  proxyUrl: string;
   useGemini: boolean;
   maxHistoryMessages: number;
   quickReplies: string[];
